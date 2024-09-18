@@ -1,9 +1,9 @@
-{% load static %}
 <!DOCTYPE html>
 
 <html>
 
   <head>
+    {% load static %}
 
     <meta charset="utf-8" />
 
@@ -19,7 +19,7 @@
 
     <link rel="stylesheet" type="text/css" href="/css/UntitledPage.css" />
 
-    <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" /> 
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/style.css' %}" /> 
 
   </head>
 
@@ -27,10 +27,9 @@
 
     <section class="launch userActionSection">
       <div class="flex_col">
-        <img class="userImage" src="images/logo.png" alt="alt text" />
+        <img class="userImage" src="{% static 'restaurants/images/logo.png' %}" alt="alt text" />
         <!-- User profile image --> 
-          <h1 class="title">welcome! let’s get to know you.</h1>
-        <a href="signup.html"> 
+      <a href="{% url 'signup' %}">
         <button class="signUpButton">
           <!-- Button for user sign up --> 
           sign up

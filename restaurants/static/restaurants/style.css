@@ -23,35 +23,30 @@ a {
       object-fit: cover;
     }
   
-    .signUpButton {
-      display: flex;
-      justify-content: center;
-      margin: 52px auto 0;
-      width: 374px;
-      max-width: 100%;
-      font: 400 35px/1.2 Georama, Helvetica, Arial, serif;
-      color: rgb(0 0 0);
-      text-align: center;
-      border-radius: 38.5px;
-      padding: 14px 8px;
-      outline: 5px solid rgb(156 82 116);
-      outline-offset: -5px;
-    }
-  
-    .logInButton {
+    .logInButton, .signUpButton {
       display: flex;
       justify-content: center;
       margin: 33px auto 0;
       width: 374px;
       max-width: 100%;
       font: 400 35px/1.2 Georama, Helvetica, Arial, serif;
-      color: rgb(0 0 0);
+      color: rgb(0 0 0);  /* Initial text color */
       text-align: center;
       border-radius: 38.5px;
       padding: 14.5px 8px;
-      outline: 5px solid rgb(156 82 116);
+      outline: 5px solid rgb(156 82 116);  /* Stroke color */
       outline-offset: -5px;
+      background-color: transparent;  /* Transparent background initially */
+      transition: all 0.3s ease;  /* Smooth hover transition */
     }
+    
+    .logInButton:hover, .signUpButton:hover {
+      background-color: rgb(156 82 116);  /* Fill stroke color on hover */
+      color: #fff;  /* Text changes to white */
+    }
+    
+  
+    
   
     .forgotPasswordText {
       display: flex;
@@ -188,13 +183,21 @@ a {
       width: 236px;
       max-width: 100%;
       font: 400 20px/1.25 "Gothic A1", Helvetica, Arial, serif;
-      color: rgb(0 0 0);
+      color: rgb(0, 0, 0); /* Text color should be black */
       text-align: center;
       border-radius: 30.51px;
       padding: 18px 34px;
-      outline: 5px solid rgb(156 82 116);
+      outline: 5px solid rgb(156, 82, 116);
       outline-offset: -5px;
+      background-color: transparent; /* Ensure background is transparent initially */
+      transition: all 0.3s ease; /* Smooth transition for hover effects */
     }
+    
+    .btn:hover {
+      background-color: rgb(156, 82, 116); /* Background color on hover */
+      color: #fff; /* Text color changes to white on hover */
+    }
+    
     body {
       display: flex;
       justify-content: center;
@@ -213,6 +216,7 @@ a {
     }
     
     h1 {
+      font-family: "Gothic A1", sans-serif;
       font-size: 24px;
       margin-bottom: 20px;
       color: #333;
@@ -286,23 +290,6 @@ a {
       text-align: center;
       font-size: 14px;
       color: rgb(126, 126, 126);
-    }
-    
-    /* Submit button styling */
-    button.btn {
-      padding: 12px 30px;
-      background-color: transparent;
-      border: 2px solid #a64e68; /* Dark red border */
-      color: #a64e68; /* Matching color for text */
-      border-radius: 50px; /* Fully rounded corners */
-      font-size: 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    button.btn:hover {
-      background-color: #a64e68; /* Dark red background on hover */
-      color: #fff; /* White text on hover */
     }
     
   }

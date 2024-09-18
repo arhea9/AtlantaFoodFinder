@@ -3,6 +3,7 @@
 <html>
 
   <head>
+    {% load static %}
 
     <meta charset="utf-8" />
 
@@ -18,15 +19,15 @@
 
     <link rel="stylesheet" type="text/css" href="/css/Signup.css" />
 
-    <link rel="stylesheet" type="text/css" href="/polls/static/polls/style.css" /> 
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/style.css' %}" /> 
 
   </head>
 
   <body class="flex-column">
     <div class="signup root">
       <div class="flex_col">
-        <img class="image" src="images/logo.png" alt="alt text" />
-        <h1 class="title">welcome! let’s get to know you.</h1>
+        <img class="image" src="{% static 'restaurants/images/logo.png' %}" alt="alt text" />
+        <h1 class="title">welcome! let’s get to know you!</h1>
   
         <form action="/submit_signup" method="POST" enctype="multipart/form-data">
           <div class="group">
