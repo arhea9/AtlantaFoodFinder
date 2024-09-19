@@ -62,45 +62,54 @@ a {
   }
   
   .signup {
-    &.root {
       display: flex;
       flex-direction: column;
+      align-items: center;
       background-color: rgb(255 255 255);
-      overflow: hidden;
+      height: 100vh;
     }
   
     .flex_col {
       display: flex;
       flex-direction: column;
-      margin: 105px auto 130px;
+      align-items: center;
+      margin: 50px auto;
       width: 468.0000305175781px;
       max-width: 85%;
     }
   
     .image {
-      width: 100%;
-      object-fit: cover;
+      width: 80%;
+      max-width: 200px;
+      margin-bottom: 20px;
     }
   
     .title {
       margin: 34px 7px 0;
       font: 400 28px/1.17 Georama, Helvetica, Arial, serif;
       color: rgb(0 0 0);
+      text-align: center;
     }
   
     .group {
-      position: relative;
       display: flex;
       flex-direction: column;
-      margin: 53px 0 0 2px;
-    }
-  
-    .cover {
-      position: relative;
+      gap: 20px;
       width: 100%;
-      object-fit: cover;
+      margin-top: 20px;
     }
   
+    .flex_row {
+      display: flex;
+      gap: 20px;
+      justify-content: space-between;
+    }
+  
+    .input_wrapper {
+      flex: 1;
+      position: relative;
+    }
+
     .highlight {
       position: absolute;
       top: 5px;
@@ -111,61 +120,7 @@ a {
       color: rgb(126 126 126);
     }
   
-    .highlight1 {
-      position: absolute;
-      top: 66px;
-      left: 7px;
-      width: auto; /* Adjust width automatically based on text */
-      height: auto; /* Adjust height automatically based on text */
-      padding: 5px 10px; /* Add padding to create space inside the box */
-      background-color: #d3d3d3; /* Light gray background */
-      border-radius: 10px; /* Rounded corners */
-      font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
-      color: rgb(126, 126, 126); /* Text color */
-  }
-  
-  
-    .highlight2 {
-      position: absolute;
-      top: 50%;
-      left: 7px;
-      width: 72px;
-      height: 20px;
-      font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
-      color: rgb(126 126 126);
-      transform: translate(0, -50%);
-    }
-  
-    .highlight3 {
-      position: absolute;
-      top: 188px;
-      left: 5px;
-      width: 70px;
-      height: 20px;
-      font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
-      color: rgb(126 126 126);
-    }
-  
-    .highlight4 {
-      position: absolute;
-      bottom: 8px;
-      left: 5px;
-      width: 128px;
-      height: 20px;
-      font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
-      color: rgb(126 126 126);
-    }
-  
-    .highlight5 {
-      position: absolute;
-      top: 5px;
-      left: 260.9999694824219px;
-      width: 71px;
-      height: 20px;
-      font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
-      color: rgb(126 126 126);
-    }
-  
+    
     .highlight6 {
       position: absolute;
       top: 173px;
@@ -223,25 +178,6 @@ a {
       text-align: center;
     }
     
-    .group {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 100%;
-      max-width: 400px;
-    }
-    
-    .flex_row {
-      display: flex;
-      gap: 15px;
-    }
-    
-    .input_wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-    
     label {
       font-size: 14px;
       color: rgb(126, 126, 126);
@@ -251,38 +187,26 @@ a {
     input[type="text"],
     input[type="email"],
     input[type="password"] {
-      padding: 12px;
-      background-color: #e0e0e0; /* Pale gray background */
-      border: none;
-      border-radius: 50px; /* Fully rounded corners */
       width: 100%;
-      box-sizing: border-box;
-      font-size: 14px;
-    }
-    
-    input[type="file"] {
+      padding: 12px;
       background-color: #e0e0e0;
       border: none;
       border-radius: 50px;
-      padding: 12px;
-      width: 100%;
-      font-size: 14px;
       box-sizing: border-box;
     }
     
+    input[type="file"] {
+      display: none;
+    }
+    
     .profile_picture_wrapper {
-      width: 150px; /* Adjust width of the profile picture input */
+      width: 150px;
       height: 150px;
+      background-color: #e0e0e0;
       border-radius: 50%;
-      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #e0e0e0;
-    }
-    
-    .profile_picture_wrapper input {
-      display: none;
     }
     
     .profile_picture_wrapper label {
@@ -292,5 +216,4 @@ a {
       color: rgb(126, 126, 126);
     }
     
-  }
   
