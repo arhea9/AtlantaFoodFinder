@@ -106,29 +106,22 @@ a {
     }
   
     .input_wrapper {
-      flex: 1;
-      position: relative;
+      display: flex;
+      flex-direction: column; /* Stack label on top of the input */
+      margin-bottom: 20px; 
     }
 
     .highlight {
-      position: absolute;
-      top: 5px;
-      left: 7px;
-      width: 73px;
-      height: 20px;
       font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
-      color: rgb(126 126 126);
+      color: rgb(126, 126, 126);
+      margin-bottom: 5px;
     }
   
     
     .highlight6 {
-      position: absolute;
-      top: 173px;
-      left: 291.0000305175781px;
-      width: 51px;
-      height: 40px;
       font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
-      color: rgb(126 126 126);
+      color: rgb(126, 126, 126);
+      margin-bottom: 5px;
     }
   
     .btn {

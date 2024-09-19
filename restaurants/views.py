@@ -12,3 +12,5 @@ def index(request):
 def signup(request):
     return render(request, "restaurants/signup.html")
 
+def login(request):
+    return render(request, "restaurants/login.html")

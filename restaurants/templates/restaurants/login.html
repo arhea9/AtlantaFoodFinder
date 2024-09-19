@@ -1,18 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-   <h1>{{ question.question_text }}</h1>
 
-<ul>
-{% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
-</ul>
+<html>
 
-<a href="{% url 'restaurants:detail' question.id %}">Vote again?</a>
-</body>
-</html>
+  <head>
+    {% load static %}
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+
+    <!-- Please DO NOT remove this line, all link and script tags will be merged to here -->
+
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+
+    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+
+    <link rel="stylesheet" type="text/css" href="/css/Signup.css" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/style.css' %}" /> 
+
+  </head>
+
+  <body class="flex-column">
+    <div class="signup root">
+      <div class="flex_col">
+        <img class="image" src="{% static 'restaurants/images/logo.png' %}" alt="alt text" />
+        <h1 class="title">welcome! let’s get to know you!</h1>
+  
+        <form action="/submit_signup" method="POST" enctype="multipart/form-data">
+          <div class="group">
+            <div class="flex_row">
+              <div class="input_wrapper">
+                <label for="first_name" class="highlight">first name</label>
+                <input type="text" id="first_name" name="first_name" required />
+              </div>
+              <div class="input_wrapper">
+                <label for="last_name" class="highlight">last name</label>
+                <input type="text" id="last_name" name="last_name" required />
+              </div>
+            </div>
+  
+            <div class="input_wrapper">
+              <label for="email" class="highlight">email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+  
+            <div class="input_wrapper">
+              <label for="username" class="highlight">username</label>
+              <input type="text" id="username" name="username" required />
+            </div>
+  
+            <div class="input_wrapper">
+              <label for="password" class="highlight">password</label>
+              <input type="password" id="password" name="password" required />
+            </div>
+  
+            <div class="input_wrapper">
+              <label for="confirm_password" class="highlight">confirm password</label>
+              <input type="password" id="confirm_password" name="confirm_password" required />
+            </div>
+          <div class="flex-row">
+            <div class="profile_picture_wrapper">
+              <label for="profile_picture" class="highlight6">profile picture</label>
+              <input type="file" id="profile_picture" name="profile_picture" accept="image/*" />
+            </div>
+          </div>
+        </div>
+          <!-- Submit button -->
+          <button type="submit" class="btn">create my account</button>
+        </form>
+      </div>
+    </div>
+  </body>
+  
+  
+
+  </html>
+  
