@@ -28,3 +28,12 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
     def __str__(self):
         return self.choice_text
+
+class Restaurant(models.Model):
+    name = models.CharField(max_length=100)
+    cuisine_type = models.CharField(max_length=100)
+    address = models.CharField(max_length=255)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    rating = models.FloatField()
+    opening_hours = models.CharField(max_length=255)
