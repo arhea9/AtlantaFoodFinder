@@ -16,3 +16,58 @@
 <a href="{% url 'restaurants:detail' question.id %}">Vote again?</a>
 </body>
 </html>
+
+
+  <head>
+    {% load static %}
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+
+    <!-- Please DO NOT remove this line, all link and script tags will be merged to here -->
+
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+
+    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+
+    <link rel="stylesheet" type="text/css" href="/css/Signup.css" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/style.css' %}" />
+
+  </head>
+
+  <body class="flex-column">
+    <div class="signup root">
+      <div class="flex_col">
+        <img class="image" src="{% static 'restaurants/images/logo.png' %}" alt="alt text" />
+        <h1 class="title">welcome back!</h1>
+
+        <form action="/submit_signup" method="POST" enctype="multipart/form-data">
+          <div class="group">
+            <div class="input_wrapper">
+              <label for="username" class="highlight1">username</label>
+              <input type="username" id="username" name="username" required />
+            </div>
+
+            <div class="input_wrapper">
+              <label for="password" class="highlight3">password</label>
+              <input type="password" id="password" name="password" required />
+            </div>
+          </div>
+            <p class="forgotPasswordText">
+            <!-- Prompt for forgotten password -->
+            forgot your password?
+            </p>
+          <!-- Submit button -->
+          <button type="submit" class="btn">log in</button>
+            <p class="forgotPasswordText">
+            <!-- Prompt to sign up -->
+            don't have an account? sign up
+            </p>
+        </form>
+      </div>
+    </div>
+  </body>
