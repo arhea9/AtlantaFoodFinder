@@ -45,7 +45,7 @@
         <img class="image" src="{% static 'restaurants/images/logo.png' %}" alt="alt text" />
         <h1 class="title">welcome! let’s get to know you!</h1>
   
-        <form action="/submit_signup" method="POST" enctype="multipart/form-data">
+        <form action="{% url 'submit_signup' %}"  method="POST" enctype="multipart/form-data">
           <div class="group">
             <div class="flex_row">
               <div class="input_wrapper">
