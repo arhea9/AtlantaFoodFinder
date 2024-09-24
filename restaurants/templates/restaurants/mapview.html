@@ -4,16 +4,14 @@
     {% load static %}
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
-    <link rel="stylesheet" type="text/css" href="/css/common.css" />
-    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
-    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/style.css' %}" />
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/mapview.css' %}" />
+    <!-- Google Maps API with Places Library -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5MEhM_JZWoMAyUrWAbDSX8ATypigqRHI&libraries=places&callback=initMap" async defer></script>
 </head>
 <body>
     <header>
         <div class="logo-container">
-            <img src="logo.png" alt="Atlanta Food Finder" class="logo">
+            <img src="{% static 'restaurants/images/logo.png' %}" alt="Atlanta Food Finder" class="logo">
         </div>
     </header>
 
@@ -22,27 +20,12 @@
             <div class="search-bar">
                 <input type="text" id="search" placeholder="Search for a restaurant">
                 <button id="filter-btn">
-                    <img src="filter-icon.png" alt="Filter">
+                    <img src="{% static 'restaurants/images/filter-icon.png' %}" alt="Filter">
                 </button>
             </div>
-            <div class="restaurant-list">
-                <div class="restaurant-item" onclick="showOnMap('Restaurant #1')">
-                    <div class="icon">★</div>
-                    <div class="restaurant-info">
-                        <h3>RESTAURANT #1</h3>
-                        <p>Cuisine</p>
-                        <a href="#">See Details</a>
-                    </div>
-                </div>
-                <div class="restaurant-item" onclick="showOnMap('Restaurant #2')">
-                    <div class="icon">★</div>
-                    <div class="restaurant-info">
-                        <h3>RESTAURANT #2</h3>
-                        <p>Cuisine</p>
-                        <a href="#">See Details</a>
-                    </div>
-                </div>
-                <!-- Add more restaurant items as needed -->
+            <h3>Top Results</h3>
+            <div class="restaurant-list" id="restaurant-list">
+                <!-- Dynamic list of restaurants will be inserted here -->
             </div>
         </div>
 
@@ -50,29 +33,118 @@
     </div>
 
     <script>
+        let map;
+        let service;
+
         function initMap() {
-            const map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 33.749, lng: -84.388},
-                zoom: 12
+    const atlanta = { lat: 33.749, lng: -84.388 };
+
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: atlanta,
+        zoom: 12
+    });
+
+    loadRestaurantsFromLocalStorage(); // Load from localStorage first
+
+    const request = {
+        location: atlanta,
+        radius: '5000',
+        type: ['restaurant']
+    };
+
+    service = new google.maps.places.PlacesService(map);
+    console.log("Requesting nearby restaurants...");
+    service.nearbySearch(request, handleSearchResults);
+}
+
+
+            google.maps.event.addListener(map, 'center_changed', function() {
+        localStorage.setItem('mapCenter', JSON.stringify(map.getCenter().toJSON()));
+    });
+
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+        localStorage.setItem('mapZoom', map.getZoom());
+    });
+
+    function handleSearchResults(results, status) {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+        const restaurantList = document.getElementById('restaurant-list');
+        restaurantList.innerHTML = ''; // Clear the list before adding new items
+
+        // Store the results in localStorage
+        localStorage.setItem('restaurants', JSON.stringify(results));
+
+        results.forEach((place) => {
+            const marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location,
+                title: place.name
             });
 
-            // Add markers for restaurants (use dynamic data from backend)
-            const restaurants = [
-                {name: 'Restaurant #1', location: {lat: 33.749, lng: -84.388}},
-                {name: 'Restaurant #2', location: {lat: 33.758, lng: -84.390}},
-            ];
+            const restaurantItem = document.createElement('div');
+            restaurantItem.className = 'restaurant-item';
+            restaurantItem.innerHTML = `
+                <div class="icon">★</div>
+                <div class="restaurant-info">
+                    <p>Cuisine: ${getCuisineType(place)}</p>
+                    <h3>${place.name}</h3>
+                    <a href="#">See Details</a>
+                </div>
+            `;
 
-            restaurants.forEach(restaurant => {
-                new google.maps.Marker({
-                    position: restaurant.location,
-                    map: map,
-                    title: restaurant.name
-                });
+            restaurantItem.addEventListener('click', () => {
+                map.setCenter(place.geometry.location);
+                map.setZoom(15);
             });
-        }
 
-        function showOnMap(restaurantName) {
-            // Logic to center the map on the clicked restaurant
+            restaurantList.appendChild(restaurantItem);
+        });
+    } else {
+        // Load from localStorage if the API call fails
+        loadRestaurantsFromLocalStorage();
+    }
+}
+
+function loadRestaurantsFromLocalStorage() {
+    const storedRestaurants = localStorage.getItem('restaurants');
+    if (storedRestaurants) {
+        const results = JSON.parse(storedRestaurants);
+        const restaurantList = document.getElementById('restaurant-list');
+        restaurantList.innerHTML = ''; // Clear the list before adding new items
+
+        results.forEach((place) => {
+            const marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location,
+                title: place.name
+            });
+
+            const restaurantItem = document.createElement('div');
+            restaurantItem.className = 'restaurant-item';
+            restaurantItem.innerHTML = `
+                <div class="icon">★</div>
+                <div class="restaurant-info">
+                    <p>Cuisine: ${getCuisineType(place)}</p>
+                    <h3>${place.name}</h3>
+                    <a href="#">See Details</a>
+                </div>
+            `;
+
+            restaurantItem.addEventListener('click', () => {
+                map.setCenter(place.geometry.location);
+                map.setZoom(15);
+            });
+
+            restaurantList.appendChild(restaurantItem);
+        });
+    }
+}
+
+
+        // Function to extract cuisine type from place types
+        function getCuisineType(place) {
+            // For simplicity, return 'Restaurant' or other type as cuisine
+            return place.types.includes('restaurant') ? 'Restaurant' : 'Cuisine';
         }
     </script>
 </body>
