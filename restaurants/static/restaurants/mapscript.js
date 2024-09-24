@@ -1,38 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% load static %}
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/mapview.css' %}" />
-    <!-- Google Maps API with Places Library -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5MEhM_JZWoMAyUrWAbDSX8ATypigqRHI&libraries=places&callback=initMap" async defer></script>
-</head>
-<body>
-    <header>
-        <div class="logo-container">
-            <img src="{% static 'restaurants/images/logo.png' %}" alt="Atlanta Food Finder" class="logo">
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="sidebar">
-            <div class="search-bar">
-                <input type="text" id="search" placeholder="Search for a restaurant">
-                <button id="filter-btn">
-                    <img src="{% static 'restaurants/images/filter-icon.png' %}" alt="Filter">
-                </button>
-            </div>
-            <h3>Top Results</h3>
-            <div class="restaurant-list" id="restaurant-list">
-                <!-- Dynamic list of restaurants will be inserted here -->
-            </div>
-        </div>
-
-        <div id="map" class="map"></div>
-    </div>
-<script>
-    let map;
+let map;
 let service;
 let favorites = []; // Array to store favorite restaurants
 
@@ -141,6 +107,3 @@ function handleSearchResults(results, status) {
         });
     }
 }
-</script>
-</body>
-</html>
