@@ -8,14 +8,14 @@
     <link rel="stylesheet" type="text/css" href="/css/common.css" />
     <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
     <link rel="stylesheet" type="text/css" href="/css/Login.css" />
-    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/userauth.css' %}" />
 </head>
 <body class="flex-column">
     <div class="login root">
         <div class="flex_col">
             <img class="image" src="{% static 'restaurants/images/logo.png' %}" alt="alt text" />
             <h1 class="title">welcome back!</h1>
-            <form action="/submit_login" method="POST">
+            <form action="{% url 'submit_login' %}" method="POST">
                 {% csrf_token %}
                 <div class="group">
                   <div class="input_wrapper">

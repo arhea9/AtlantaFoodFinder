@@ -17,3 +17,22 @@ def login(request):
 
 def forgot_password(request):
     return render(request, "restaurants/forgotpassword.html")
+
+def login_view(request):
+    if request.method == 'POST':
+        # Process the login form (authentication, etc.)
+        # Assuming successful login:
+        return redirect('mapview')  # Use the URL name
+    return render(request, 'restaurants/login.html')  # Redirect back to the login page if GET
+
+def signup_view(request):
+    if request.method == 'POST':
+        # Process the signup form
+        # Here, you would validate and save the user data
+        # If successful, redirect to the mapview
+        return redirect('mapview')  # Redirect to mapview after successful signup
+    return render(request, 'restaurants/signup.html')  # Render the signup page on GET
+
+
+def mapview(request):
+    return render(request, 'restaurants/mapview.html')  # Ensure this template exists
