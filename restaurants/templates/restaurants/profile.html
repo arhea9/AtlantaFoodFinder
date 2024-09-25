@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="/css/Login.css" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/userauth.css' %}" />
+    <title>Profile</title>
+</head>
+<body>
+    <header>
+        <h1>{{ profile.user.username }}'s Profile</h1>
+        <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" onerror="this.src='{% static 'restaurants/images/default-profile.png' %}'" />
+    </header>
+
+    <h2>Favorite Restaurants</h2>
+    <ul>
+        {% for restaurant in profile.favorite_restaurants.all %}
+            <li>{{ restaurant.name }}</li>
+        {% empty %}
+            <li>No favorite restaurants yet!</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'logout' %}">Logout</a>
+</body>
+</html>

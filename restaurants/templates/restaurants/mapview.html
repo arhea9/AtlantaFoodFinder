@@ -27,6 +27,12 @@
             <div class="restaurant-list" id="restaurant-list">
                 <!-- Dynamic list of restaurants will be inserted here -->
             </div>
+            <div class="profile-container">
+            <a href="{% url 'profile_page' %}">
+                <img src="{% static 'restaurants/images/default-profile.png' %}" alt="Profile Picture" class="profile-pic">
+            </a>
+            </div>
+
         </div>
 
         <div id="map" class="map"></div>
