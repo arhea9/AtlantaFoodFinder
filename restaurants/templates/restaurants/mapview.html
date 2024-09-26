@@ -32,9 +32,11 @@
         <div id="map" class="map"></div>
     </div>
 <script>
-    let map;
+let map;
 let service;
-let favorites = []; // Array to store favorite restaurants
+let favorites = [];
+let infoWindow; // Declare a variable to hold the InfoWindow instance
+let markers = []; // Keep track of markers
 
 function initMap() {
     const atlanta = { lat: 33.749, lng: -84.388 };
@@ -45,11 +47,14 @@ function initMap() {
         zoom: 12
     });
 
+    // Initialize the InfoWindow
+    infoWindow = new google.maps.InfoWindow();
+
     // Request object for the Google Places API
     const request = {
         location: atlanta,
         radius: '5000', // 5 km radius
-        type: ['restaurant'] // Search for restaurants
+        type: ['restaurant']
     };
 
     // Initialize the Places service
@@ -60,29 +65,29 @@ function initMap() {
 }
 
 function getCuisineType(place) {
-const cuisineMap = {
-'chinese': 'Chinese',
-'italian': 'Italian',
-'japanese': 'Japanese',
-'mexican': 'Mexican',
-'thai': 'Thai',
-'indian': 'Indian',
-'korean': 'Korean',
-'vietnamese': 'Vietnamese',
-'greek': 'Greek',
-'french': 'French',
-'spanish': 'Spanish',
-'american': 'American',
-// Add more mappings as needed
-};
+    const cuisineMap = {
+        'chinese': 'Chinese',
+        'italian': 'Italian',
+        'japanese': 'Japanese',
+        'mexican': 'Mexican',
+        'thai': 'Thai',
+        'indian': 'Indian',
+        'korean': 'Korean',
+        'vietnamese': 'Vietnamese',
+        'greek': 'Greek',
+        'french': 'French',
+        'spanish': 'Spanish',
+        'american': 'American',
+    };
 
-// Extract types that indicate cuisine
-const cuisines = place.types
-.map(type => cuisineMap[type.toLowerCase()] || null)
-.filter(cuisine => cuisine !== null);
+    const types = place.types || [];
 
-// If no specific cuisine types are found, return 'Cuisine: Not Specified'
-return cuisines.length > 0 ? cuisines.join(', ') : 'Cuisine: Not Specified';
+    const cuisines = types
+        .map(type => cuisineMap[type.toLowerCase()] || null)
+        .filter(cuisine => cuisine !== null);
+
+    // Return empty string if no cuisine types are found
+    return cuisines.length > 0 ? `Cuisine: ${cuisines.join(', ')}` : 'Not Specified';
 }
 
 
@@ -90,8 +95,8 @@ function handleSearchResults(results, status) {
     if (status === google.maps.places.PlacesServiceStatus.OK) {
         const restaurantList = document.getElementById('restaurant-list');
         restaurantList.innerHTML = ''; // Clear previous results
+        clearMarkers(); // Clear previous markers
 
-        // Loop through each result (restaurant)
         results.forEach((place) => {
             // Add marker for each restaurant on the map
             const marker = new google.maps.Marker({
@@ -100,24 +105,64 @@ function handleSearchResults(results, status) {
                 title: place.name
             });
 
-            // Create the restaurant item HTML
+            markers.push(marker); // Add marker to the array
+
             const restaurantItem = document.createElement('div');
             restaurantItem.className = 'restaurant-item';
             restaurantItem.innerHTML = `
                 <div class="icon favorite" data-id="${place.place_id}">☆</div>
                 <div class="restaurant-info">
-                    <p>Cuisine: ${getCuisineType(place)}</p>
                     <h3>${place.name}</h3>
-                    <a href="#">See Details</a>
+                    <a href="#" class="details-link" data-id="${place.place_id}">See Details</a>
                 </div>
             `;
-
 
             // Add event listener to center the map on restaurant when clicked
             restaurantItem.addEventListener('click', () => {
                 map.panTo(place.geometry.location);
                 map.setZoom(17);
             });
+
+            // Add event listener to show details when "See Details" is clicked
+            restaurantItem.querySelector('.details-link').addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default link behavior
+
+                const placeId = this.getAttribute('data-id');
+
+                // Fetch detailed information about the place
+                service.getDetails({ placeId: placeId }, (placeDetails, status) => {
+                    if (status === google.maps.places.PlacesServiceStatus.OK) {
+                        const cuisine = getCuisineType(placeDetails);
+                        const address = placeDetails.formatted_address || 'Address not available';
+                        const rating = placeDetails.rating || 'Rating not available';
+                        const phone = placeDetails.formatted_phone_number || 'Phone number not available';
+                        const reviews = placeDetails.reviews?.slice(0, 3).map(review => `<p>"${review.text}" - ${review.author_name}</p>`).join('') || 'No reviews available';
+
+                        // Set the content for the InfoWindow
+                        infoWindow.setContent(`
+                            <div>
+                                <h3>${placeDetails.name}</h3>
+                                <p><strong>Cuisine:</strong> ${cuisine}</p>
+                                <p><strong>Address:</strong> ${address}</p>
+                                <p><strong>Rating:</strong> ${rating}</p>
+                                <p><strong>Phone:</strong> ${phone}</p>
+                                <div><strong>Reviews:</strong>${reviews}</div>
+                                <button id="see-more" class="btn">See More</button>
+                            </div>
+                        `);
+
+                        // Open the InfoWindow at the restaurant's location
+                        infoWindow.open(map, marker);
+
+                        google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+                        document.getElementById('see-more').addEventListener('click', () => {
+                        // Open the restaurant's Google Maps page in a new tab
+                        window.open(`https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}`, '_blank');
+                        });
+                    });
+                }
+            });
+        });
 
             // Add event listener to toggle favorite status
             restaurantItem.querySelector('.favorite').addEventListener('click', function(event) {
@@ -136,11 +181,17 @@ function handleSearchResults(results, status) {
                 console.log('Favorites:', favorites); // Debug: log favorites
             });
 
-            // Append the restaurant item to the list
             restaurantList.appendChild(restaurantItem);
         });
     }
 }
+
+// Clear all previous markers from the map
+function clearMarkers() {
+    markers.forEach(marker => marker.setMap(null)); // Remove each marker from the map
+    markers = []; // Clear the array of markers
+}
+window.onload = initMap;
 </script>
 </body>
 </html>

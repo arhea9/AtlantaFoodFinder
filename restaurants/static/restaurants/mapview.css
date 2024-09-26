@@ -102,3 +102,28 @@ body {
     width: 300px; /* Set the desired width for the logo */
     height: auto; /* Maintain aspect ratio */
 }
+
+.review-box {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px 0; /* Adds some space between reviews */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #f9f9f9; /* Optional: Light background color */
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    margin: 54px 0 0 2px;
+    width: 236px;
+    max-width: 100%;
+    font: 400 20px/1.25 "Gothic A1", Helvetica, Arial, serif;
+    color: rgb(0, 0, 0); /* Text color should be black */
+    text-align: center;
+    border-radius: 30.51px;
+    padding: 18px 34px;
+    outline: 5px solid rgb(156, 82, 116);
+    outline-offset: -5px;
+    background-color: transparent; /* Ensure background is transparent initially */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+  }
