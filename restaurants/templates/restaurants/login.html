@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        .login-container h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        .login-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .login-container form .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .login-container form .btn:hover {
+            background-color: #0056b3;
+        }
+        .login-container p {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .login-container a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .login-container a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: red;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        {% if form.errors %}
+            <div class="error-message">Invalid login credentials. Please try again.</div>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <p>Forgot your password? <a href="{% url 'password_reset' %}">Reset it here</a>.</p>
+        <p>Don't have an account? <a href="{% url 'signup' %}">Register here</a>.</p>
+    </div>
+</body>
+</html>
+  
