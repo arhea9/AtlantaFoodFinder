@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+
+    <!-- Please DO NOT remove this line, all link and script tags will be merged to here -->
+
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+
+    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+
+    <link rel="stylesheet" type="text/css" href="/static\css/profilestyles.css" />
+
+  </head>
+
+  <body class="flex-column">
+
+    <section class="profile profileSection">
+      <div class="flexColumn">
+        <div class="logo-container">
+          <a href="/index.html">
+            <img class="logo" src="static\css/images/logo.png" alt="atl food finder" />
+          </a>
+        </div>
+        <div class="contentBoxMain">
+          <div class="flexColumn1">
+            <div class="flexColumn2">
+              <div class="flexRow">
+                <a href="/index.html" class="subtitle"> &lt; return</a>
+                <button class="editProfileButton">
+                  <!-- TODO --> 
+                  <p class="editButtonText">edit profile</p>
+                  <img class="editButtonIcon" src="static\css/images/edit_icon.png" alt="alt text" />
+                </button>
+              </div>
+              <div class="flexColumn3">
+                <div class="flex-row">
+                    <div class="profile_picture_wrapper">
+                      <img id="profilePicturePreview" class="profile_picture" src="static\css/images/default-profile.png" />
+                  </div>
+                <h2 class="fullNameTitle">FNAME LNAME</h2>
+                <p class="usernameHighlight">username</p>
+              </div>
+            </div>
+            <!-- Favorites Section -->
+            <div class="restaurant-list">
+              <!--{% for restaurant in user.favorite_restaurants %}-->
+              <!--this^ will make it a list-->
+              <h2 class="favoritesTitle">my favorites</h2>
+              <div class="restaurant-item">
+                <div class="restaurant-info">
+                  <div class="cuisineText1">CUISINE</div>
+                  <h3 class="restaurantTitle2">RESTAURANT #1</h3>
+                  <div class="detailsLink1">see details</div>
+                </div>
+                <!--<h5>{{ restaurant.cuisine }}</h5>
+                  <h3>{{ restaurant.name }}</h3>
+                  <p>{{ restaurant.description }}</p>
+                  <a href="{{ restaurant.url }}" target="_blank">see details</a>-->
+              </div>
+
+
+              <div class="restaurant-item">
+                <div class="restaurant-info">
+                  <div class="cuisineText1">CUISINE</div>
+                  <h3 class="restaurantTitle2">RESTAURANT #1</h3>
+                  <div class="detailsLink1">see details</div>
+                </div>
+                <!--<h5>{{ restaurant.cuisine }}</h5>
+                  <h3>{{ restaurant.name }}</h3>
+                  <p>{{ restaurant.description }}</p>
+                  <a href="{{ restaurant.url }}" target="_blank">see details</a>-->
+              </div>
+
+              <div class="restaurant-item">
+                <div class="restaurant-info">
+                  <div class="cuisineText1">CUISINE</div>
+                  <h3 class="restaurantTitle2">RESTAURANT #1</h3>
+                  <div class="detailsLink1">see details</div>
+                </div>
+                <!--<h5>{{ restaurant.cuisine }}</h5>
+                  <h3>{{ restaurant.name }}</h3>
+                  <p>{{ restaurant.description }}</p>
+                  <a href="{{ restaurant.url }}" target="_blank">see details</a>-->
+              </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </body>
+
+</html>
