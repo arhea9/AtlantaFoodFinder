@@ -31,167 +31,298 @@
 
         <div id="map" class="map"></div>
     </div>
-<script>
-let map;
-let service;
-let favorites = [];
-let infoWindow; // Declare a variable to hold the InfoWindow instance
-let markers = []; // Keep track of markers
 
-function initMap() {
-    const atlanta = { lat: 33.749, lng: -84.388 };
+    <script>
+        let map;
+        let favorites = []; // Array to store favorite restaurant place IDs
+        let service;
+        let infoWindow; // Declare a variable to hold the InfoWindow instance
+        let markers = []; // Keep track of markers
+        const restaurantsPerPage = 21; // Number of restaurants to show per page
+        let currentPage = 0; // Current page number
+        let allRestaurants = [];
+        let nextPageToken = null;
+        
+        function initMap() {
+            const atlanta = { lat: 33.749, lng: -84.388 };
 
-    // Initialize the map centered on Atlanta
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: atlanta,
-        zoom: 12
-    });
-
-    // Initialize the InfoWindow
-    infoWindow = new google.maps.InfoWindow();
-
-    // Request object for the Google Places API
-    const request = {
-        location: atlanta,
-        radius: '5000', // 5 km radius
-        type: ['restaurant']
-    };
-
-    // Initialize the Places service
-    service = new google.maps.places.PlacesService(map);
-
-    // Perform nearby search to get restaurants
-    service.nearbySearch(request, handleSearchResults);
-}
-
-function getCuisineType(place) {
-    const cuisineMap = {
-        'chinese': 'Chinese',
-        'italian': 'Italian',
-        'japanese': 'Japanese',
-        'mexican': 'Mexican',
-        'thai': 'Thai',
-        'indian': 'Indian',
-        'korean': 'Korean',
-        'vietnamese': 'Vietnamese',
-        'greek': 'Greek',
-        'french': 'French',
-        'spanish': 'Spanish',
-        'american': 'American',
-    };
-
-    const types = place.types || [];
-
-    const cuisines = types
-        .map(type => cuisineMap[type.toLowerCase()] || null)
-        .filter(cuisine => cuisine !== null);
-
-    // Return empty string if no cuisine types are found
-    return cuisines.length > 0 ? `Cuisine: ${cuisines.join(', ')}` : 'Not Specified';
-}
-
-
-function handleSearchResults(results, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-        const restaurantList = document.getElementById('restaurant-list');
-        restaurantList.innerHTML = ''; // Clear previous results
-        clearMarkers(); // Clear previous markers
-
-        results.forEach((place) => {
-            // Add marker for each restaurant on the map
-            const marker = new google.maps.Marker({
-                map: map,
-                position: place.geometry.location,
-                title: place.name
+            // Initialize the map centered on Atlanta
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: atlanta,
+                zoom: 13.5
             });
 
-            markers.push(marker); // Add marker to the array
+            // Initialize the InfoWindow
+            infoWindow = new google.maps.InfoWindow();
 
-            const restaurantItem = document.createElement('div');
-            restaurantItem.className = 'restaurant-item';
-            restaurantItem.innerHTML = `
-                <div class="icon favorite" data-id="${place.place_id}">☆</div>
-                <div class="restaurant-info">
-                    <h3>${place.name}</h3>
-                    <a href="#" class="details-link" data-id="${place.place_id}">See Details</a>
-                </div>
-            `;
+            // Request object for the Google Places API
+            const request = {
+                location: atlanta,
+                radius: '5000', // 5 km radius
+                type: ['restaurant']
+            };
 
-            // Add event listener to center the map on restaurant when clicked
-            restaurantItem.addEventListener('click', () => {
-                map.panTo(place.geometry.location);
-                map.setZoom(17);
-            });
+            // Initialize the Places service
+            service = new google.maps.places.PlacesService(map);
 
-            // Add event listener to show details when "See Details" is clicked
-            restaurantItem.querySelector('.details-link').addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent default link behavior
+            // Perform nearby search to get restaurants
+            fetchAllRestaurants(request);
+        }
 
-                const placeId = this.getAttribute('data-id');
+        async function fetchAllRestaurants(request) {
+            let fetchedPlaceIds = new Set(); // Set to track unique place IDs
+            const radiusIncrement = 2000; // Increment radius by 1000 meters for each batch
+            let currentRadius = 5000; // Start with the initial radius of 5 km
 
-                // Fetch detailed information about the place
-                service.getDetails({ placeId: placeId }, (placeDetails, status) => {
+    try {
+        do {
+            // Add the next page token if it exists
+            if (nextPageToken) {
+                request.pagetoken = nextPageToken;
+            }
+
+            // Update radius for each request if no new results are found
+            request.radius = currentRadius;
+
+            // Perform nearby search to get restaurants
+            await new Promise((resolve, reject) => {
+                service.nearbySearch(request, (results, status) => {
                     if (status === google.maps.places.PlacesServiceStatus.OK) {
-                        const cuisine = getCuisineType(placeDetails);
-                        const address = placeDetails.formatted_address || 'Address not available';
-                        const rating = placeDetails.rating || 'Rating not available';
-                        const phone = placeDetails.formatted_phone_number || 'Phone number not available';
-                        const reviews = placeDetails.reviews?.slice(0, 3).map(review => `<p>"${review.text}" - ${review.author_name}</p>`).join('') || 'No reviews available';
+                        results.forEach(place => {
+                            // Check if the place ID has already been fetched
+                            if (!fetchedPlaceIds.has(place.place_id)) {
+                                fetchedPlaceIds.add(place.place_id); // Add to set
+                                allRestaurants.push(place); // Append new unique results
+                            }
+                        });
 
-                        // Set the content for the InfoWindow
-                        infoWindow.setContent(`
-                            <div>
-                                <h3>${placeDetails.name}</h3>
-                                <p><strong>Cuisine:</strong> ${cuisine}</p>
-                                <p><strong>Address:</strong> ${address}</p>
-                                <p><strong>Rating:</strong> ${rating}</p>
-                                <p><strong>Phone:</strong> ${phone}</p>
-                                <div><strong>Reviews:</strong>${reviews}</div>
-                                <button id="see-more" class="btn">See More</button>
-                            </div>
-                        `);
+                        nextPageToken = results.next_page_token; // Get next page token
+                        resolve();
+                    } else {
+                        reject(status); // Handle error
+                    }
+                });
+            });
 
-                        // Open the InfoWindow at the restaurant's location
-                        infoWindow.open(map, marker);
+            // Optional: Delay before the next request to avoid exceeding rate limits
+            if (nextPageToken) {
+                await new Promise(resolve => setTimeout(resolve, 2000)); // 2-second delay
+            }
 
-                        google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+            // If no new results found, increment the radius for the next request
+            if (nextPageToken && fetchedPlaceIds.size === allRestaurants.length) {
+                currentRadius += radiusIncrement; // Increase radius for the next batch
+            }
+
+        } while (nextPageToken);
+
+        // After fetching all unique restaurants, display them
+        displayRestaurants(); // Display all results at once
+
+    } catch (error) {
+        console.error('Error fetching restaurants:', error);
+    }
+}
+
+
+        function getCuisineType(placeDetails) {
+            const cuisineMap = {
+                'Chinese': ['chinese', 'dumplings', 'dim sum', 'szechuan'],
+                'Italian': ['italian', 'pasta', 'pizza', 'lasagna'],
+                'Japanese': ['japanese', 'sushi', 'ramen', 'tempura'],
+                'Mexican': ['mexican', 'tacos', 'burritos', 'enchiladas'],
+                'Thai': ['thai', 'pad thai', 'curry', 'satay'],
+                'Indian': ['indian', 'curry', 'tikka', 'naan', 'masala'],
+                'Korean': ['korean', 'bibimbap', 'kimchi', 'bulgogi'],
+                'Vietnamese': ['vietnamese', 'pho', 'banh mi'],
+                'Greek': ['greek', 'gyros', 'souvlaki', 'tzatziki'],
+                'French': ['french', 'croissant', 'baguette', 'crepe'],
+                'Spanish': ['spanish', 'paella', 'tapas', 'churros'],
+                'American': ['american', 'burger', 'fries', 'steak'],
+                'Barbecue': ['barbecue', 'bbq', 'ribs', 'brisket'],
+                'Seafood': ['seafood', 'fish', 'shrimp', 'crab'],
+                'Vegetarian': ['vegetarian', 'vegan', 'plant-based', 'tofu'],
+                'Gluten-Free': ['gluten-free', 'celiac', 'allergy', 'intolerance'],
+                'Southern': ['southern', 'fried chicken', 'grits', 'collard greens'],
+            };
+
+            const types = placeDetails.types || [];
+            const matchedCuisines = types
+                .map(type => {
+                    for (const [cuisine, keywords] of Object.entries(cuisineMap)) {
+                        if (keywords.includes(type.toLowerCase())) {
+                            return cuisine;
+                        }
+                    }
+                    return null;
+                })
+                .filter(cuisine => cuisine !== null);
+
+            // If no cuisine was found in place types, scan reviews for keywords
+            if (matchedCuisines.length === 0 && placeDetails.reviews) {
+                placeDetails.reviews.forEach(review => {
+                    const reviewText = review.text.toLowerCase();
+
+                    for (const [cuisine, keywords] of Object.entries(cuisineMap)) {
+                        keywords.forEach(keyword => {
+                            if (reviewText.includes(keyword)) {
+                                matchedCuisines.push(cuisine);
+                            }
+                        });
+                    }
+                });
+            }
+
+            return matchedCuisines.length > 0 ? `${[...new Set(matchedCuisines)].join(', ')}` : 'Not Specified';
+        }
+
+        function handleSearchResults(results, status) {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                allRestaurants = results; // Store all restaurant results
+                displayRestaurants(); // Display the first page of results
+            }
+        }
+
+        function displayRestaurants() {
+            const restaurantList = document.getElementById('restaurant-list');
+            restaurantList.innerHTML = ''; // Clear previous results
+            clearMarkers(); // Clear previous markers
+
+            const startIndex = currentPage * restaurantsPerPage;
+            const endIndex = Math.min(startIndex + restaurantsPerPage, allRestaurants.length);
+            const limitedResults = allRestaurants.slice(startIndex, endIndex);
+
+            limitedResults.forEach((place) => {
+                // Add marker for each restaurant on the map
+                const marker = new google.maps.Marker({
+                    map: map,
+                    position: place.geometry.location,
+                    title: place.name
+                });
+
+                markers.push(marker); // Add marker to the array
+
+                marker.addListener('click', () => {
+            map.panTo(marker.getPosition()); // Pan to the marker's position
+            map.setZoom(17); // Zoom in to the marker
+
+            // Fetch detailed information about the place when marker is clicked
+            service.getDetails({ placeId: place.place_id }, (placeDetails, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    const cuisine = getCuisineType(placeDetails);
+                    const address = placeDetails.formatted_address || 'Address not available';
+                    const rating = placeDetails.rating || 'Rating not available';
+                    const phone = placeDetails.formatted_phone_number || 'Phone number not available';
+                    const reviews = placeDetails.reviews?.slice(0, 3).map(review => `<p>"${review.text}" - ${review.author_name}</p>`).join('') || 'No reviews available';
+
+                    // Set the content for the InfoWindow
+                    infoWindow.setContent(`
+                        <div>
+                            <h3>${placeDetails.name}</h3>
+                            <p><strong>Cuisine:</strong> ${cuisine}</p>
+                            <p><strong>Address:</strong> ${address}</p>
+                            <p><strong>Rating:</strong> ${rating}</p>
+                            <p><strong>Phone:</strong> ${phone}</p>
+                            <div><strong>Reviews:</strong>${reviews}</div>
+                            <button id="see-more" class="btn">See More</button>
+                        </div>
+                    `);
+
+                    // Open the InfoWindow at the restaurant's location
+                    infoWindow.open(map, marker);
+
+                    google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
                         document.getElementById('see-more').addEventListener('click', () => {
-                        // Open the restaurant's Google Maps page in a new tab
-                        window.open(`https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}`, '_blank');
+                            // Open the restaurant's Google Maps page in a new tab
+                            window.open(`https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}`, '_blank');
                         });
                     });
                 }
             });
         });
 
-            // Add event listener to toggle favorite status
-            restaurantItem.querySelector('.favorite').addEventListener('click', function(event) {
-                event.stopPropagation(); // Prevent triggering the restaurant click event
-                const placeId = this.getAttribute('data-id');
+                const restaurantItem = document.createElement('div');
+                restaurantItem.className = 'restaurant-item';
+                restaurantItem.innerHTML = `
+                    <div class="icon favorite" data-id="${place.place_id}">☆</div>
+                    <div class="restaurant-info">
+                        <h3>${place.name}</h3>
+                        <a href="#" class="details-link" data-id="${place.place_id}">See Details</a>
+                    </div>
+                `;
 
-                // Toggle favorite status
-                if (favorites.includes(placeId)) {
-                    favorites = favorites.filter(id => id !== placeId);
-                    this.textContent = '☆'; // Change to hollow star
-                } else {
-                    favorites.push(placeId);
-                    this.textContent = '★'; // Change to filled star
-                }
+                // Add event listener to center the map on restaurant when clicked
+                restaurantItem.addEventListener('click', () => {
+                    map.panTo(place.geometry.location);
+                    map.setZoom(17);
+                });
 
-                console.log('Favorites:', favorites); // Debug: log favorites
+                restaurantItem.querySelector('.favorite').addEventListener('click', function(event) {
+                    event.stopPropagation(); // Prevent click event from bubbling up
+
+                    const placeId = this.getAttribute('data-id');
+
+                    if (favorites.includes(placeId)) {
+                        favorites = favorites.filter(id => id !== placeId);
+                        this.textContent = '☆'; // Change icon to empty star
+                    } else {
+                        favorites.push(placeId);
+                        this.textContent = '★'; // Change icon to filled star
+                    }
+                });
+
+                // Add event listener to show details when "See Details" is clicked
+                restaurantItem.querySelector('.details-link').addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default link behavior
+
+                    const placeId = this.getAttribute('data-id');
+
+                    // Fetch detailed information about the place
+                    service.getDetails({ placeId: placeId }, (placeDetails, status) => {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            const cuisine = getCuisineType(placeDetails);
+                            const address = placeDetails.formatted_address || 'Address not available';
+                            const rating = placeDetails.rating || 'Rating not available';
+                            const phone = placeDetails.formatted_phone_number || 'Phone number not available';
+                            const reviews = placeDetails.reviews?.slice(0, 3).map(review => `<p>"${review.text}" - ${review.author_name}</p>`).join('') || 'No reviews available';
+
+                            // Set the content for the InfoWindow
+                            infoWindow.setContent(`
+                                <div>
+                                    <h3>${placeDetails.name}</h3>
+                                    <p><strong>Cuisine:</strong> ${cuisine}</p>
+                                    <p><strong>Address:</strong> ${address}</p>
+                                    <p><strong>Rating:</strong> ${rating}</p>
+                                    <p><strong>Phone:</strong> ${phone}</p>
+                                    <div><strong>Reviews:</strong>${reviews}</div>
+                                    <button id="see-more" class="btn">See More</button>
+                                </div>
+                            `);
+
+                            // Open the InfoWindow at the restaurant's location
+                            infoWindow.open(map, marker);
+
+                            google.maps.event.addListenerOnce(infoWindow, 'domready', () => {
+                                document.getElementById('see-more').addEventListener('click', () => {
+                                    // Open the restaurant's Google Maps page in a new tab
+                                    window.open(`https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}`, '_blank');
+                                });
+                            });
+                        }
+                    });
+                });
+
+                restaurantList.appendChild(restaurantItem);
             });
+        }
 
-            restaurantList.appendChild(restaurantItem);
-        });
-    }
-}
+        // Clear all previous markers from the map
+        function clearMarkers() {
+            markers.forEach(marker => marker.setMap(null)); // Remove each marker from the map
+            markers = []; // Clear the array of markers
+        }
 
-// Clear all previous markers from the map
-function clearMarkers() {
-    markers.forEach(marker => marker.setMap(null)); // Remove each marker from the map
-    markers = []; // Clear the array of markers
-}
-window.onload = initMap;
-</script>
+        window.onload = initMap;
+    </script>
 </body>
 </html>

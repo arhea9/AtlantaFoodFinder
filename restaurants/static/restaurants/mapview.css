@@ -3,25 +3,34 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    height: 100vh; /* Ensure full viewport height */
+    overflow: hidden; /* Prevent scrolling on the body */
 }
 
 .container {
     display: flex;
+    height: 100vh; /* Full viewport height */
 }
 
 .sidebar {
-    width: 30%;
-    background-color: #f8f8f8;
-    padding: 20px;
-    overflow-y: auto;
-    border-right: 1px solid #ddd;
+    width: 300px; /* Fixed width for the sidebar */
+    background-color: #f9f9f9; /* Light background color */
+    overflow: hidden; /* Prevent inner scrolling */
+    display: flex;
+    flex-direction: column; /* Stack child elements vertically */
+    padding: 10px;
+}
+
+.map {
+    flex-grow: 1;
 }
 
 #map {
     width: 70%;
-    height: 100vh;
+    height: 100%; /* Full height of the viewport */
 }
 
+/* Make the search bar stay at the top */
 .search-bar {
     display: flex;
     justify-content: space-between;
@@ -42,12 +51,14 @@ body {
     cursor: pointer;
 }
 
+/* Make restaurant list take the remaining space in the sidebar and scroll */
 .restaurant-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    height: calc(100% - 60px); /* Subtract height for padding/margin or other elements */
+    overflow-y: auto; /* Make the list scrollable */
+    padding-right: 10px; /* Add space for the scrollbar */
 }
 
+/* Restaurant item styling */
 .restaurant-item {
     display: flex;
     padding: 15px;
@@ -57,6 +68,7 @@ body {
     align-items: center;
     cursor: pointer;
     transition: transform 0.2s ease;
+    margin-bottom: 10px; /* Space between items */
 }
 
 .restaurant-item:hover {
@@ -91,6 +103,7 @@ body {
     text-decoration: underline;
 }
 
+/* Logo container and logo styling */
 .logo-container {
     display: flex;
     justify-content: center; /* Center horizontally */
@@ -103,19 +116,12 @@ body {
     height: auto; /* Maintain aspect ratio */
 }
 
-.review-box {
-    border: 1px solid black;
-    padding: 10px;
-    margin: 10px 0; /* Adds some space between reviews */
-    border-radius: 8px; /* Rounded corners */
-    background-color: #f9f9f9; /* Optional: Light background color */
-}
-
+/* Button styling */
 .btn {
     display: flex;
     justify-content: center;
     margin: 54px 0 0 2px;
-    width: 236px;
+    width: 250px;
     max-width: 100%;
     font: 400 20px/1.25 "Gothic A1", Helvetica, Arial, serif;
     color: rgb(0, 0, 0); /* Text color should be black */
@@ -126,4 +132,10 @@ body {
     outline-offset: -5px;
     background-color: transparent; /* Ensure background is transparent initially */
     transition: all 0.3s ease; /* Smooth transition for hover effects */
-  }
+}
+
+/* Hover effect for buttons */
+.btn:hover {
+    background-color: rgb(156, 82, 116); /* Fill color on hover */
+    color: white; /* Change text color to white */
+}
