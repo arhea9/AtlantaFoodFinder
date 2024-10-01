@@ -6,7 +6,6 @@ body {
       height:100vh;
       justify-content: center;
       align-items: center;
-      overflow-y: hidden; /* Prevent scrolling on the body */
   }
 
   .profile {

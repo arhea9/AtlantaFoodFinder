@@ -106,15 +106,23 @@ body {
 /* Logo container and logo styling */
 .logo-container {
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically if necessary */
-    height: 100px; /* Adjust height as needed */
-}
+    align-items: center; /* Align items vertically centered */
+    justify-content: space-between; /* Space between items */
+  }
 
 .logo {
     width: 300px; /* Set the desired width for the logo */
     height: auto; /* Maintain aspect ratio */
 }
+
+.profile-picture-header {
+    width: 40px; /* Set width as needed */
+    height: 40px; /* Set height as needed */
+    border-radius: 50%; /* Make it circular */
+    margin-left: auto; /* Push to the right */
+    margin-right: 15px;
+    cursor: pointer; /* Change cursor on hover */
+  }
 
 /* Button styling */
 .btn {
@@ -194,4 +202,4 @@ select {
     border: 1px solid #ccc; /* Match border with site */
 }
 
-/* Button styling */
+

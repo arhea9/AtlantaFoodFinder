@@ -81,57 +81,9 @@
       </div>
     </section>
 
-    <div class="profile-container">
-        <!-- Profile Header Section -->
-        <header class="profile-header">
-            <h1>My Favorite Restaurants</h1>
-            <p>Here are the restaurants you've marked as favorite:</p>
-        </header>
-
-        <!-- Favorites Section -->
-        <section class="favorites-section">
-            <div id="favorites-list" class="favorites-list">
-                <!-- Favorite Restaurants will be injected here by JavaScript -->
-            </div>
-        </section>
-    </div>
 
     <script>
-
-  function toggleEditMode() {
-      const profileView = document.getElementById('profileView');
-      const profileEdit = document.getElementById('profileEdit');
-
-      if (profileEdit.style.display === 'none') {
-        profileView.style.display = 'none';
-        profileEdit.style.display = 'block';
-      } else {
-        profileView.style.display = 'block';
-        profileEdit.style.display = 'none';
-      }
-    }
-
-    // Save the edited profile
-    function saveProfile() {
-      const firstName = document.getElementById('firstNameEdit').value;
-      const lastName = document.getElementById('lastNameEdit').value;
-      const username = document.getElementById('usernameEdit').value;
-
-      // Update the display with new values
-      document.getElementById('fullNameDisplay').textContent = `${firstName} ${lastName}`;
-      document.getElementById('usernameDisplay').textContent = username;
-
-      // Toggle back to view mode
-      toggleEditMode();
-    }
-
-    // Preview uploaded profile picture
-    function previewProfilePicture(event) {
-      const profilePicturePreview = document.getElementById('profilePicturePreview');
-      profilePicturePreview.src = URL.createObjectURL(event.target.files[0]);
-    }
-        // Assuming you already have the favorites array from localStorage
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         console.log('Favorites loaded:', favorites); // Debugging line
 
 
@@ -187,6 +139,40 @@
         document.addEventListener("DOMContentLoaded", function () {
         displayFavoriteRestaurants();
         });
+
+  function toggleEditMode() {
+      const profileView = document.getElementById('profileView');
+      const profileEdit = document.getElementById('profileEdit');
+
+      if (profileEdit.style.display === 'none') {
+        profileView.style.display = 'none';
+        profileEdit.style.display = 'block';
+      } else {
+        profileView.style.display = 'block';
+        profileEdit.style.display = 'none';
+      }
+    }
+
+    // Save the edited profile
+    function saveProfile() {
+      const firstName = document.getElementById('firstNameEdit').value;
+      const lastName = document.getElementById('lastNameEdit').value;
+      const username = document.getElementById('usernameEdit').value;
+
+      // Update the display with new values
+      document.getElementById('fullNameDisplay').textContent = `${firstName} ${lastName}`;
+      document.getElementById('usernameDisplay').textContent = username;
+
+      // Toggle back to view mode
+      toggleEditMode();
+    }
+
+    // Preview uploaded profile picture
+    function previewProfilePicture(event) {
+      const profilePicturePreview = document.getElementById('profilePicturePreview');
+      profilePicturePreview.src = URL.createObjectURL(event.target.files[0]);
+    }
+        // Assuming you already have the favorites array from localStorage
 
     </script>
 </body>

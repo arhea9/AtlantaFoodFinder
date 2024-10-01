@@ -10,11 +10,15 @@
 </head>
 <body>
     <header>
-        <div class="header-container">
         <div class="logo-container">
-            <img src="{% static 'restaurants/images/logo.png' %}" alt="Atlanta Food Finder" class="logo">
-        </div>
-        </div>
+            <a href="{% url 'mapview' %}">
+              <img class="logo" src="{% static 'restaurants/images/logo.png' %}" alt="atl food finder" />
+            </a>
+            <a href="{% url 'profile' %}">
+              <img id="profilePictureHeader" class="profile-picture-header" src="{% static 'restaurants/images/default-profile.png' %}" alt="Profile" />
+            </a>
+          </div>
+          
     </header>
 
     <div class="container">
