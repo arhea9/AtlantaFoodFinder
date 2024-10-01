@@ -148,6 +148,17 @@ body {
     color: white; /* Change text color to white */
 }
 
+.submit-btn {
+    padding: 8px 15px;
+    font-size: 14px;
+    background-color: #9b5173;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
 /* Modal styles */
 .modal {
     display: none; /* Hidden by default */
@@ -203,3 +214,11 @@ select {
 }
 
 
+.hidden-text {
+    display: none;
+    margin-top: 15px;
+}
+
+.visible-text {
+    display: block;
+}

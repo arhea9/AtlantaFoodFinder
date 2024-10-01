@@ -313,6 +313,11 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                             <p><strong>Phone:</strong> ${phone}</p>
                             <div><strong>Reviews:</strong>${reviews}</div>
                             <button id="see-more" class="btn">See More</button>
+                            <button id="write-review" class="btn">Write a Review</button>
+                            <div id="textBox" class="hidden-text">
+                                <textarea placeholder="Write your review here..."></textarea>
+                                <button class="submit-btn">Submit Review</button>
+                            </div>
                         </div>
                     `);
 
@@ -323,6 +328,16 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                         document.getElementById('see-more').addEventListener('click', () => {
                             // Open the restaurant's Google Maps page in a new tab
                             window.open(`https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}`, '_blank');
+                        });
+                        document.getElementById("write-review").addEventListener("click", function() {
+                            var textBox=document.getElementById("textbox");
+                            if (textBox.classList.contains("hidden=text")) {
+                                textBox.classList.remove("hidden-text");
+                                textBox.classList.add("visible-text");
+                            } else {
+                                textBox.classList.remove("visible-text");
+                                textBox.classList.add("hidden-text");
+                            }
                         });
                     });
                 }
@@ -393,6 +408,11 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                                     <p><strong>Phone:</strong> ${phone}</p>
                                     <div><strong>Reviews:</strong>${reviews}</div>
                                     <button id="see-more" class="btn">See More</button>
+                                    <button id="write-review" class="btn">Write a Review</button>
+                                    <div id="textBox" class="hidden-text">
+                                        <textarea placeholder="Write your review here..."></textarea>
+                                        <button class="submit-btn">Submit Review</button>
+                                    </div>
                                 </div>
                             `);
 
@@ -403,6 +423,16 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                                 document.getElementById('see-more').addEventListener('click', () => {
                                     // Open the restaurant's Google Maps page in a new tab
                                     window.open(`https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}`, '_blank');
+                                });
+                                document.getElementById("write-review").addEventListener("click", function() {
+                                    var textBox = document.getElementById("textBox");
+                                    if (textBox.classList.contains("hidden-text")) {
+                                        textBox.classList.remove("hidden-text");
+                                        textBox.classList.add("visible-text");
+                                    } else {
+                                        textBox.classList.remove("visible-text");
+                                        textBox.classList.add("hidden-text");
+                                    }
                                 });
                             });
                         }
