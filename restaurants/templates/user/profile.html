@@ -4,8 +4,6 @@
 
   <head>
 
-      {% load static %}
-
     <meta charset="utf-8" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -18,7 +16,7 @@
 
     <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
 
-    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/profile.css' %}" />
+    <link rel="stylesheet" type="text/css" href="/static\css/profilestyles.css" />
 
   </head>
 
@@ -28,23 +26,23 @@
       <div class="flexColumn">
         <div class="logo-container">
           <a href="/index.html">
-            <img class="logo" src="{% static 'restaurants/images/logo.png' %}" alt="atl food finder" />
+            <img class="logo" src="static\css/images/logo.png" alt="atl food finder" />
           </a>
         </div>
         <div class="contentBoxMain">
           <div class="flexColumn1">
             <div class="flexColumn2">
               <div class="flexRow1">
-                <a href="{% url 'mapview' %}" class="subtitle"> &lt; return</a>
-                  <a href="{% url 'edit_profile' %}" class="editProfileButton">
-                      <p class="editButtonText">edit profile</p>
-                      <img class="editButtonIcon" src="{% static 'restaurants/images/edit_icon.png' %}" alt="alt text" />
-                  </a>
+                <a href="/index.html" class="subtitle"> &lt; return</a>
+                <a href="/edit_profile" class="editProfileButton">
+                    <p class="editButtonText">edit profile</p>
+                    <img class="editButtonIcon" src="static\css/images/edit_icon.png" alt="alt text" />
+                </a>
               </div>
               <div class="flexColumn3">
                 <div class="flex-row2">
                     <div class="profile_picture_wrapper">
-                      <img id="profilePicturePreview" class="profile_picture" src="{% static 'restaurants/images/default-profile.png' %}" />
+                      <img id="profilePicturePreview" class="profile_picture" src="static\css/images/default-profile.png" />
                   </div>
                 <h2 class="fullNameTitle">FNAME LNAME</h2>
                 <p class="usernameHighlight">username</p>
@@ -52,44 +50,12 @@
             </div>
             <!-- Favorites Section -->
             <div class="restaurant-list">
-              <!-- bracket % for restaurant in user.favorite_restaurants %} -->
-              <!--this^ will make it a list-->
-              <h2 class="favoritesTitle">my favorites</h2>
-              <div class="restaurant-item">
-                <div class="restaurant-info">
-                  <div class="cuisineText">CUISINE</div>
-                  <h3 class="restaurantTitle">RESTAURANT #1</h3>
-                  <div class="detailsLink">see details</div>
+              <!-- Favorites Section -->
+              <section class="favorites-section">
+                <div id="favorites-list" class="favorites-list">
+                <!-- Favorite Restaurants will be injected here by JavaScript -->
                 </div>
-                <!--<h5>{!{ restaurant.cuisine }}</h5>
-                  <h3>{!{ restaurant.name }}</h3>
-                  <p>{!{ restaurant.description }}</p>
-                  <a href="{!{ restaurant.url }}" target="_blank">see details</a>-->
-              </div>
-
-
-              <div class="restaurant-item">
-                <div class="restaurant-info">
-                  <div class="cuisineText">CUISINE</div>
-                  <h3 class="restaurantTitle">RESTAURANT #1</h3>
-                  <div class="detailsLink">see details</div>
-                </div>
-                <!--<h5>{!{ restaurant.cuisine }}</h5>
-                  <h3>{!{ restaurant.name }}</h3>
-                  <p>{!{ restaurant.description }}</p>
-                  <a href="{!{ restaurant.url }}" target="_blank">see details</a>-->
-              </div>
-
-              <div class="restaurant-item">
-                <div class="restaurant-info">
-                  <div class="cuisineText">CUISINE</div>
-                  <h3 class="restaurantTitle">RESTAURANT #1</h3>
-                  <div class="detailsLink">see details</div>
-                </div>
-                <!--<h5>{!{ restaurant.cuisine }}</h5>
-                  <h3>{!{ restaurant.name }}</h3>
-                  <p>{!{ restaurant.description }}</p>
-                  <a href="{!{ restaurant.url }}" target="_blank">see details</a>-->
+              </section>
               </div>
 
               </div>
@@ -98,7 +64,57 @@
         </div>
       </div>
     </section>
+    <script>
+      // Assuming you already have the favorites array from localStorage
+      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
+      // The 'service' object can be used to retrieve restaurant details
+      let service = new google.maps.places.PlacesService(document.createElement('div'));
+
+      // Function to get restaurant details based on the place ID
+      function getRestaurantDetails(placeId, callback) {
+          service.getDetails({ placeId: placeId }, (placeDetails, status) => {
+              if (status === google.maps.places.PlacesServiceStatus.OK) {
+                  callback(placeDetails);
+              } else {
+                  console.error('Failed to retrieve details for place ID:', placeId);
+              }
+          });
+      }
+
+      // Function to display favorite restaurants
+      function displayFavoriteRestaurants() {
+          const favoritesList = document.getElementById('favorites-list');
+          favoritesList.innerHTML = ''; // Clear existing favorites list
+
+          if (favorites.length === 0) {
+              favoritesList.innerHTML = '<p>No favorite restaurants added yet.</p>';
+              return;
+          }
+
+          favorites.forEach(placeId => {
+              getRestaurantDetails(placeId, placeDetails => {
+                  const restaurantItem = document.createElement('div');
+                  restaurantItem.className = 'restaurant-item';
+
+                  // Dynamically build the restaurant details
+                  restaurantItem.innerHTML = `
+                      <div class="restaurant-info">
+                          <h3>${placeDetails.name}</h3>
+                          <p><strong>Address:</strong> ${placeDetails.formatted_address || 'Not available'}</p>
+                          <p><strong>Rating:</strong> ${placeDetails.rating || 'Not available'}</p>
+                          <button class="view-more-btn" onclick="window.open('https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}', '_blank')">View More</button>
+                      </div>
+                  `;
+
+                  favoritesList.appendChild(restaurantItem);
+              });
+          });
+      }
+
+      // Call the function to display favorite restaurants when the page loads
+      window.onload = displayFavoriteRestaurants;
+  </script>
 
   </body>
 
