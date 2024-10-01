@@ -23,6 +23,35 @@
                     <img src="{% static 'restaurants/images/filter-icon.png' %}" alt="Filter">
                 </button>
             </div>
+<!-- Filter Modal (hidden by default) -->
+<div id="filter-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Filter Restaurants</h2>
+
+        <!-- Filter options inside the modal -->
+        <label for="rating">Minimum Rating:</label>
+        <select id="rating">
+            <option value="0">Any</option>
+            <option value="1">1+ stars</option>
+            <option value="2">2+ stars</option>
+            <option value="3">3+ stars</option>
+            <option value="4">4+ stars</option>
+            <option value="4.5">4.5+ stars</option>
+        </select>
+
+        <label for="distance">Distance (km):</label>
+        <select id="distance">
+            <option value="5">Within 5 km</option>
+            <option value="10">Within 10 km</option>
+            <option value="20">Within 20 km</option>
+            <option value="50">Within 50 km</option>
+        </select>
+
+        <button class = "btn" id="apply-filters">Apply Filters</button>
+    </div>
+</div>
+            
             <h3>Top Results</h3>
             <div class="restaurant-list" id="restaurant-list">
                 <!-- Dynamic list of restaurants will be inserted here -->
@@ -68,6 +97,59 @@
             // Perform nearby search to get restaurants
             fetchAllRestaurants(request);
         }
+
+        function searchRestaurants() {
+    const searchInput = document.getElementById('search').value.trim().toLowerCase(); // Make case-insensitive
+
+    const request = {
+        query: searchInput,
+        location: map.getCenter(), // Search around the map's current center
+        radius: '5000', // 5 km radius
+        type: 'restaurant' // Ensure only restaurants are returned
+    };
+
+    // Use textSearch to search for restaurants
+    service.textSearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            // Filter results based on name or cuisine type
+            const filteredResults = results.filter(place => {
+                const placeName = place.name.toLowerCase();
+                const placeTypes = place.types.map(type => type.toLowerCase());
+                const matchedCuisine = placeTypes.includes(searchInput); // Check if cuisine matches
+                
+                // Include place if the name contains the keyword or it's a matching cuisine
+                return placeName.includes(searchInput) || matchedCuisine;
+            });
+
+            if (filteredResults.length > 0) {
+                allRestaurants = filteredResults; // Store filtered results
+                displayRestaurants(); // Display filtered results
+            } else {
+                alert('No restaurants found matching your search criteria.');
+            }
+        } else {
+            console.error('Search failed due to: ', status);
+        }
+    });
+}
+
+
+// Add event listener for the search button
+document.getElementById('filter-btn').addEventListener('click', searchRestaurants);
+
+// Optionally trigger search when pressing Enter in the search input
+document.getElementById('search').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        searchRestaurants();
+    }
+});
+
+document.getElementById('filter-btn').addEventListener('click', searchRestaurants);
+    document.getElementById('search').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            searchRestaurants();
+        }
+    });
 
         async function fetchAllRestaurants(request) {
             let fetchedPlaceIds = new Set(); // Set to track unique place IDs
@@ -321,6 +403,77 @@
             markers.forEach(marker => marker.setMap(null)); // Remove each marker from the map
             markers = []; // Clear the array of markers
         }
+
+        // Get modal and filter button elements
+const modal = document.getElementById('filter-modal');
+const filterBtn = document.getElementById('filter-btn');
+const closeBtn = document.getElementsByClassName('close')[0];
+
+// Open the modal when filter button is clicked
+filterBtn.addEventListener('click', function() {
+    modal.style.display = 'block';
+});
+
+// Close the modal when the close button is clicked
+closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+});
+
+// Close the modal when clicking outside of the modal
+window.addEventListener('click', function(event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// Apply filters when the "Apply Filters" button is clicked
+document.getElementById('apply-filters').addEventListener('click', function() {
+    const selectedRating = document.getElementById('rating').value;
+    const selectedDistance = document.getElementById('distance').value;
+
+    // Convert distance from km to meters
+    const distanceInMeters = selectedDistance * 1000;
+
+    // Call searchRestaurants with the selected filters
+    searchRestaurantsWithFilters(selectedRating, distanceInMeters);
+
+    // Close the modal after applying filters
+    modal.style.display = 'none';
+});
+
+// Function to search restaurants with filters for ratings and distance
+function searchRestaurantsWithFilters(minRating, maxDistance) {
+    const searchInput = document.getElementById('search').value.trim().toLowerCase();
+
+    const request = {
+        location: map.getCenter(), // Search around the map's current center
+        radius: maxDistance, // Use selected distance
+        type: 'restaurant'
+    };
+
+    // If the user has entered a search term, include it in the query
+    if (searchInput !== '') {
+        request.query = searchInput;
+    }
+
+    // Perform the search with or without a search term
+    service.textSearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            // Filter results based on minimum rating
+            const filteredResults = results.filter(place => place.rating >= minRating);
+
+            if (filteredResults.length > 0) {
+                allRestaurants = filteredResults; // Store filtered results
+                displayRestaurants(); // Display filtered results
+            } else {
+                alert('No restaurants found matching your filters.');
+            }
+        } else {
+            console.error('Search failed due to: ', status);
+        }
+    });
+}
+
 
         window.onload = initMap;
     </script>
