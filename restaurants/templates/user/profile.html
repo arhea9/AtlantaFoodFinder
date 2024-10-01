@@ -1,121 +1,165 @@
 <!DOCTYPE html>
-
 <html>
 
-  <head>
+<head>
+  {% load static %}
 
-    <meta charset="utf-8" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+  <link rel="stylesheet" type="text/css" href="/css/common.css" />
+  <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+  <link rel="stylesheet" type="text/css" href="{% static 'restaurants/profile.css' %}" />
 
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+  <title>Profile</title>
+</head>
 
-    <!-- Please DO NOT remove this line, all link and script tags will be merged to here -->
+<body class="flex-column">
+  <section class="profile">
+    <div class="flexColumn">
+      <div class="logo-container">
+        <a href="/index.html">
+          <img class="logo" src="{% static 'restaurants/images/logo.png' %}" alt="atl food finder" />
+        </a>
+      </div>
 
-    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+      <div class="contentBoxMain">
+        <div class="flexColumn1">
+          <div class="flexColumn2">
+            <div class="flexRow1">
+              <a href="/index.html" class="subtitle"> &lt; return</a>
 
-    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+              <!-- Edit Profile Button -->
+              <button id="editProfileButton" class="editProfileButton" onclick="toggleEditMode()">
+                <p class="editButtonText">edit profile</p>
+                <img class="editButtonIcon" src="{% static 'restaurants/images/edit_icon.png' %}" alt="edit profile" />
+              </button>
+            </div>
 
-    <link rel="stylesheet" type="text/css" href="/static\css/profilestyles.css" />
-
-  </head>
-
-  <body class="flex-column">
-
-    <section class="profile">
-      <div class="flexColumn">
-        <div class="logo-container">
-          <a href="/index.html">
-            <img class="logo" src="static\css/images/logo.png" alt="atl food finder" />
-          </a>
-        </div>
-        <div class="contentBoxMain">
-          <div class="flexColumn1">
-            <div class="flexColumn2">
-              <div class="flexRow1">
-                <a href="/index.html" class="subtitle"> &lt; return</a>
-                <a href="/edit_profile" class="editProfileButton">
-                    <p class="editButtonText">edit profile</p>
-                    <img class="editButtonIcon" src="static\css/images/edit_icon.png" alt="alt text" />
-                </a>
-              </div>
-              <div class="flexColumn3">
-                <div class="flex-row2">
-                    <div class="profile_picture_wrapper">
-                      <img id="profilePicturePreview" class="profile_picture" src="static\css/images/default-profile.png" />
-                  </div>
-                <h2 class="fullNameTitle">FNAME LNAME</h2>
-                <p class="usernameHighlight">username</p>
+            <!-- Profile View Mode -->
+            <div id="profileView" class="flexColumn3">
+              <div class="flex-row2">
+                <div class="profile_picture_wrapper">
+                  <img id="profilePicture" class="profile_picture" src="{% static 'restaurants/images/default-profile.png' %}" />
+                </div>
+                <h2 class="fullNameTitle">{{ user.first_name }} {{ user.last_name }}</h2>
+                <p class="usernameHighlight">{{ user.username }}</p>
               </div>
             </div>
+
+            <!-- Profile Edit Mode (Initially Hidden) -->
+            <div id="profileEdit" class="flexColumn3" style="display: none;">
+              <div class="flex-row2">
+                <div class="profile_picture_wrapper">
+                  <input type="file" id="profilePictureUpload" onchange="previewProfilePicture(event)" />
+                  <img id="profilePicturePreview" class="profile_picture" src="{% static 'restaurants/images/default-profile.png' %}" />
+                </div>
+                <input type="text" id="firstNameEdit" value="FNAME" placeholder="First Name" />
+                <input type="text" id="lastNameEdit" value="LNAME" placeholder="Last Name" />
+                <input type="text" id="usernameEdit" value="username" placeholder="Username" />
+              </div>
+              <button class="saveButton" onclick="saveProfile()">Save</button>
+              <button class="cancelButton" onclick="toggleEditMode()">Cancel</button>
+            </div>
+
             <!-- Favorites Section -->
             <div class="restaurant-list">
-              <!-- Favorites Section -->
               <section class="favorites-section">
                 <div id="favorites-list" class="favorites-list">
-                <!-- Favorite Restaurants will be injected here by JavaScript -->
+                  <!-- Favorite Restaurants will be injected here by JavaScript -->
                 </div>
               </section>
-              </div>
-
-              </div>
             </div>
+
           </div>
         </div>
       </div>
-    </section>
-    <script>
-      // Assuming you already have the favorites array from localStorage
-      const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    </div>
+  </section>
 
-      // The 'service' object can be used to retrieve restaurant details
-      let service = new google.maps.places.PlacesService(document.createElement('div'));
+  <script>
+    // Toggle between view and edit mode
+    function toggleEditMode() {
+      const profileView = document.getElementById('profileView');
+      const profileEdit = document.getElementById('profileEdit');
 
-      // Function to get restaurant details based on the place ID
-      function getRestaurantDetails(placeId, callback) {
-          service.getDetails({ placeId: placeId }, (placeDetails, status) => {
-              if (status === google.maps.places.PlacesServiceStatus.OK) {
-                  callback(placeDetails);
-              } else {
-                  console.error('Failed to retrieve details for place ID:', placeId);
-              }
-          });
+      if (profileEdit.style.display === 'none') {
+        profileView.style.display = 'none';
+        profileEdit.style.display = 'block';
+      } else {
+        profileView.style.display = 'block';
+        profileEdit.style.display = 'none';
+      }
+    }
+
+    // Save the edited profile
+    function saveProfile() {
+      const firstName = document.getElementById('firstNameEdit').value;
+      const lastName = document.getElementById('lastNameEdit').value;
+      const username = document.getElementById('usernameEdit').value;
+
+      // Update the display with new values
+      document.getElementById('fullNameDisplay').textContent = `${firstName} ${lastName}`;
+      document.getElementById('usernameDisplay').textContent = username;
+
+      // Toggle back to view mode
+      toggleEditMode();
+    }
+
+    // Preview uploaded profile picture
+    function previewProfilePicture(event) {
+      const profilePicturePreview = document.getElementById('profilePicturePreview');
+      profilePicturePreview.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    // Display favorite restaurants from localStorage
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    let service = new google.maps.places.PlacesService(document.createElement('div'));
+
+    function getRestaurantDetails(placeId, callback) {
+      service.getDetails({ placeId: placeId }, (placeDetails, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          callback(placeDetails);
+        } else {
+          console.error('Failed to retrieve details for place ID:', placeId);
+        }
+      });
+    }
+
+    function displayFavoriteRestaurants() {
+      const favoritesList = document.getElementById('favorites-list');
+      favoritesList.innerHTML = ''; // Clear existing favorites
+
+      if (favorites.length === 0) {
+        favoritesList.innerHTML = '<p>No favorite restaurants added yet.</p>';
+        return;
       }
 
-      // Function to display favorite restaurants
-      function displayFavoriteRestaurants() {
-          const favoritesList = document.getElementById('favorites-list');
-          favoritesList.innerHTML = ''; // Clear existing favorites list
+      favorites.forEach(placeId => {
+        getRestaurantDetails(placeId, placeDetails => {
+          const restaurantItem = document.createElement('div');
+          restaurantItem.className = 'restaurant-item';
 
-          if (favorites.length === 0) {
-              favoritesList.innerHTML = '<p>No favorite restaurants added yet.</p>';
-              return;
-          }
+          restaurantItem.innerHTML = `
+            <div class="restaurant-info">
+              <h3>${placeDetails.name}</h3>
+              <p><strong>Address:</strong> ${placeDetails.formatted_address || 'Not available'}</p>
+              <p><strong>Rating:</strong> ${placeDetails.rating || 'Not available'}</p>
+              <button class="view-more-btn" onclick="window.open('https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}', '_blank')">View More</button>
+            </div>
+          `;
 
-          favorites.forEach(placeId => {
-              getRestaurantDetails(placeId, placeDetails => {
-                  const restaurantItem = document.createElement('div');
-                  restaurantItem.className = 'restaurant-item';
+          favoritesList.appendChild(restaurantItem);
+        });
+      });
+    }
 
-                  // Dynamically build the restaurant details
-                  restaurantItem.innerHTML = `
-                      <div class="restaurant-info">
-                          <h3>${placeDetails.name}</h3>
-                          <p><strong>Address:</strong> ${placeDetails.formatted_address || 'Not available'}</p>
-                          <p><strong>Rating:</strong> ${placeDetails.rating || 'Not available'}</p>
-                          <button class="view-more-btn" onclick="window.open('https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}', '_blank')">View More</button>
-                      </div>
-                  `;
-
-                  favoritesList.appendChild(restaurantItem);
-              });
-          });
-      }
-
-      // Call the function to display favorite restaurants when the page loads
-      window.onload = displayFavoriteRestaurants;
+    // Call the function to display favorite restaurants when the page loads
+    window.onload = displayFavoriteRestaurants;
   </script>
-
-  </body>
+</body>
 
 </html>
