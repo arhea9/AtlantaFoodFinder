@@ -324,10 +324,6 @@ a {
         color: rgb(0 0 0);
         text-decoration: underline;
       }
-
-      .input_wrapper {
-        position: relative;
-    }
     
     .highlight {
         position: absolute;

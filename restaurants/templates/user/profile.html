@@ -3,6 +3,7 @@
 <html>
 
   <head>
+    {% load static %}
 
     <meta charset="utf-8" />
 
@@ -16,85 +17,79 @@
 
     <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
 
-    <link rel="stylesheet" type="text/css" href="/css/Profile.css" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/profile.css' %}" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5MEhM_JZWoMAyUrWAbDSX8ATypigqRHI&libraries=places&callback=initMap" async defer></script>
 
   </head>
 
-  <body class="flex-column">
+  <body>
+    <div class="profile-container">
+        <!-- Profile Header Section -->
+        <header class="profile-header">
+            <h1>My Favorite Restaurants</h1>
+            <p>Here are the restaurants you've marked as favorite:</p>
+        </header>
 
-    <div class="profile profileSection">
-      <div class="flexColumnContainer">
-        <img class="profileImage" src="/assets/95ac6ca488040e5894c17f5099baf984.svg" alt="alt text" />
-        <!-- This image represents the user&#x27;s profile. -->
-        <div class="groupContainer">
-          <div class="flexColumnOne">
-            <div class="flexColumnTwo">
-              <div class="backgroundColorOne"></div>
-              <div class="flexColumnThree">
-                <h2 class="fullNameHeader">FNAME LNAME</h2>
-                <p class="usernameHighlight">username</p>
-              </div>
+        <!-- Favorites Section -->
+        <section class="favorites-section">
+            <div id="favorites-list" class="favorites-list">
+                <!-- Favorite Restaurants will be injected here by JavaScript -->
             </div>
-            <div class="flexColumnFour">
-              <h2 class="favoritesHeader">my favorites</h2>
-              <div class="contentBox">
-                <!-- Contains a card for each favorite restaurant. -->
-                <div class="flexRowOne">
-                  <img class="restaurantImageOne" src="/assets/e1334ae7182e1c97539c137218830626.svg" alt="alt text" />
-                  <!-- Image representing Restaurant #1 -->
-                  <div class="flexColumnFive">
-                    <p class="cuisineDescriptionOne">CUISINE</p>
-                    <h3 class="restaurantOneSubtitle">RESTAURANT #1</h3>
-                    <div class="detailsLinkOne">
-                      <!-- Link to view more details about Restaurant #1. -->
-                      see details
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="contentBoxOne">
-                <!-- Contains Restaurant #2 information card. -->
-                <div class="flexRowTwo">
-                  <img class="restaurantImageTwo" src="/assets/edb955c5f62e60f4eb24f658cc51b6e0.svg" alt="alt text" />
-                  <!-- Image representing Restaurant #2 -->
-                  <div class="flexColumnFiveTwo">
-                    <p class="cuisineDescriptionTwo">CUISINE</p>
-                    <h3 class="restaurantTwoSubtitle">RESTAURANT #2</h3>
-                    <div class="detailsLinkTwo">
-                      <!-- Link to view more details about Restaurant #2. -->
-                      see details
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="contentBoxTwo">
-                <!-- Contains Restaurant #3 information card. -->
-                <div class="flexRowThree">
-                  <img class="restaurantImageThree" src="/assets/edb955c5f62e60f4eb24f658cc51b6e0.svg" alt="alt text" />
-                  <!-- Image representing Restaurant #3 -->
-                  <div class="flexColumnFiveThree">
-                    <p class="cuisineDescriptionThree">CUISINE</p>
-                    <h3 class="restaurantThreeSubtitle">RESTAURANT #3</h3>
-                    <div class="detailsLinkThree">
-                      <!-- Link to view more details about Restaurant #3. -->
-                      see details
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <h3 class="returnSubtitle"> &lt; return</h3>
-          <div class="backgroundColorTwo"></div>
-          <button class="editProfileButton">
-            <!-- TODO -->
-            <p class="editButtonText">edit profile</p>
-            <img class="editButtonIcon" src="/assets/f0d6448d05c2fb68f9349dec18e1749b.svg" alt="alt text" />
-          </button>
-        </div>
-      </div>
+        </section>
     </div>
 
-  </body>
+    <script>
+        // Assuming you already have the favorites array from localStorage
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+        // The 'service' object can be used to retrieve restaurant details
+        let service = new google.maps.places.PlacesService(document.createElement('div'));
+
+        // Function to get restaurant details based on the place ID
+        function getRestaurantDetails(placeId, callback) {
+            service.getDetails({ placeId: placeId }, (placeDetails, status) => {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    callback(placeDetails);
+                } else {
+                    console.error('Failed to retrieve details for place ID:', placeId);
+                }
+            });
+        }
+
+        // Function to display favorite restaurants
+        function displayFavoriteRestaurants() {
+            const favoritesList = document.getElementById('favorites-list');
+            favoritesList.innerHTML = ''; // Clear existing favorites list
+
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = '<p>No favorite restaurants added yet.</p>';
+                return;
+            }
+
+            favorites.forEach(placeId => {
+                getRestaurantDetails(placeId, placeDetails => {
+                    const restaurantItem = document.createElement('div');
+                    restaurantItem.className = 'restaurant-item';
+
+                    // Dynamically build the restaurant details
+                    restaurantItem.innerHTML = `
+                        <div class="restaurant-info">
+                            <h3>${placeDetails.name}</h3>
+                            <p><strong>Address:</strong> ${placeDetails.formatted_address || 'Not available'}</p>
+                            <p><strong>Rating:</strong> ${placeDetails.rating || 'Not available'}</p>
+                            <button class="view-more-btn" onclick="window.open('https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}', '_blank')">View More</button>
+                        </div>
+                    `;
+
+                    favoritesList.appendChild(restaurantItem);
+                });
+            });
+        }
+
+        // Call the function to display favorite restaurants when the page loads
+        window.onload = displayFavoriteRestaurants;
+    </script>
+</body>
 
 </html>

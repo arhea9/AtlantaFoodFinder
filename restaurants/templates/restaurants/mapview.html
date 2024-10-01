@@ -10,8 +10,10 @@
 </head>
 <body>
     <header>
+        <div class="header-container">
         <div class="logo-container">
             <img src="{% static 'restaurants/images/logo.png' %}" alt="Atlanta Food Finder" class="logo">
+        </div>
         </div>
     </header>
 
@@ -63,11 +65,11 @@
 
     <script>
         let map;
-        let favorites = []; // Array to store favorite restaurant place IDs
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || []; // Array to store favorite restaurant place IDs
         let service;
         let infoWindow; // Declare a variable to hold the InfoWindow instance
         let markers = []; // Keep track of markers
-        const restaurantsPerPage = 21; // Number of restaurants to show per page
+        const restaurantsPerPage = 20; // Number of restaurants to show per page
         let currentPage = 0; // Current page number
         let allRestaurants = [];
         let nextPageToken = null;
@@ -326,11 +328,13 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                 const restaurantItem = document.createElement('div');
                 restaurantItem.className = 'restaurant-item';
                 restaurantItem.innerHTML = `
-                    <div class="icon favorite" data-id="${place.place_id}">☆</div>
-                    <div class="restaurant-info">
-                        <h3>${place.name}</h3>
-                        <a href="#" class="details-link" data-id="${place.place_id}">See Details</a>
-                    </div>
+                    <div class="icon favorite ${favorites.includes(place.place_id) ? 'filled' : ''}" data-id="${place.place_id}">
+                ${favorites.includes(place.place_id) ? '★' : '☆'}
+            </div>
+            <div class="restaurant-info">
+                <h3>${place.name}</h3>
+                <a href="#" class="details-link" data-id="${place.place_id}">See Details</a>
+            </div>
                 `;
 
                 // Add event listener to center the map on restaurant when clicked
@@ -346,12 +350,19 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
 
                     if (favorites.includes(placeId)) {
                         favorites = favorites.filter(id => id !== placeId);
+                        this.classList.remove('filled');
                         this.textContent = '☆'; // Change icon to empty star
                     } else {
                         favorites.push(placeId);
+                        this.classList.add('filled');
                         this.textContent = '★'; // Change icon to filled star
                     }
+                    saveFavorites();
                 });
+
+                function saveFavorites() {
+                    localStorage.setItem('favorites', JSON.stringify(favorites));
+                }
 
                 // Add event listener to show details when "See Details" is clicked
                 restaurantItem.querySelector('.details-link').addEventListener('click', function(event) {
@@ -475,7 +486,7 @@ function searchRestaurantsWithFilters(minRating, maxDistance) {
 }
 
 
-        window.onload = initMap;
+    window.onload = initMap;
     </script>
 </body>
 </html>

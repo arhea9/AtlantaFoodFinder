@@ -36,3 +36,6 @@ def signup_view(request):
 
 def mapview(request):
     return render(request, 'restaurants/mapview.html')  # Ensure this template exists
+
+def profile(request):    
+    return render(request, 'user/profile.html')  # Ensure this template exists
