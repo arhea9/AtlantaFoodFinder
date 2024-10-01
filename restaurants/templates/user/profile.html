@@ -13,17 +13,74 @@
 
     <!-- Please DO NOT remove this line, all link and script tags will be merged to here -->
 
-    <link rel="stylesheet" type="text/css" href="/css/common.css" />
-
-    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
-
-
     <link rel="stylesheet" type="text/css" href="{% static 'restaurants/profile.css' %}" />
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD5MEhM_JZWoMAyUrWAbDSX8ATypigqRHI&libraries=places&callback=initMap" async defer></script>
 
   </head>
 
   <body>
+    <section class="profile">
+      <div class="flexColumn">
+        <div class="logo-container">
+          <a href="{% url 'mapview' %}">
+            <img class="logo" src="{% static 'restaurants/images/logo.png' %}" alt="atl food finder" />
+          </a>
+        </div>
+  
+        <div class="contentBoxMain">
+          <div class="flexColumn1">
+            <div class="flexColumn2">
+              <div class="flexRow1">
+                <a href="{% url 'mapview' %}" class="subtitle"> &lt; return</a>
+  
+                <!-- Edit Profile Button -->
+                <button id="editProfileButton" class="editProfileButton" onclick="toggleEditMode()">
+                  <p class="editButtonText">edit profile</p>
+                  <img class="editButtonIcon" src="{% static 'restaurants/images/edit_icon.png' %}" alt="edit profile" />
+                </button>
+              </div>
+  
+              <!-- Profile View Mode -->
+              <div id="profileView" class="flexColumn3">
+                <div class="flex-row2">
+                  <div class="profile_picture_wrapper">
+                    <img id="profilePicture" class="profile_picture" src="{% static 'restaurants/images/default-profile.png' %}" />
+                  </div>
+                  <h2 class="fullNameTitle">{{ user.first_name }} {{ user.last_name }}</h2>
+                  <p class="usernameHighlight">{{ user.username }}</p>
+                </div>
+              </div>
+  
+              <!-- Profile Edit Mode (Initially Hidden) -->
+              <div id="profileEdit" class="flexColumn3" style="display: none;">
+                <div class="flex-row2">
+                  <div class="profile_picture_wrapper">
+                    <input type="file" id="profilePictureUpload" onchange="previewProfilePicture(event)" />
+                    <img id="profilePicturePreview" class="profile_picture" src="{% static 'restaurants/images/default-profile.png' %}" />
+                  </div>
+                  <input type="text" id="firstNameEdit" value="FNAME" placeholder="First Name" />
+                  <input type="text" id="lastNameEdit" value="LNAME" placeholder="Last Name" />
+                  <input type="text" id="usernameEdit" value="username" placeholder="Username" />
+                </div>
+                <button class="saveButton" onclick="saveProfile()">Save</button>
+                <button class="cancelButton" onclick="toggleEditMode()">Cancel</button>
+              </div>
+  
+              <!-- Favorites Section -->
+              <div class="restaurant-list">
+                <section class="favorites-section">
+                  <div id="favorites-list" class="favorites-list">
+                    <!-- Favorite Restaurants will be injected here by JavaScript -->
+                  </div>
+                </section>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="profile-container">
         <!-- Profile Header Section -->
         <header class="profile-header">
@@ -40,8 +97,43 @@
     </div>
 
     <script>
+
+  function toggleEditMode() {
+      const profileView = document.getElementById('profileView');
+      const profileEdit = document.getElementById('profileEdit');
+
+      if (profileEdit.style.display === 'none') {
+        profileView.style.display = 'none';
+        profileEdit.style.display = 'block';
+      } else {
+        profileView.style.display = 'block';
+        profileEdit.style.display = 'none';
+      }
+    }
+
+    // Save the edited profile
+    function saveProfile() {
+      const firstName = document.getElementById('firstNameEdit').value;
+      const lastName = document.getElementById('lastNameEdit').value;
+      const username = document.getElementById('usernameEdit').value;
+
+      // Update the display with new values
+      document.getElementById('fullNameDisplay').textContent = `${firstName} ${lastName}`;
+      document.getElementById('usernameDisplay').textContent = username;
+
+      // Toggle back to view mode
+      toggleEditMode();
+    }
+
+    // Preview uploaded profile picture
+    function previewProfilePicture(event) {
+      const profilePicturePreview = document.getElementById('profilePicturePreview');
+      profilePicturePreview.src = URL.createObjectURL(event.target.files[0]);
+    }
         // Assuming you already have the favorites array from localStorage
         const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        console.log('Favorites loaded:', favorites); // Debugging line
+
 
         // The 'service' object can be used to retrieve restaurant details
         let service = new google.maps.places.PlacesService(document.createElement('div'));
@@ -57,6 +149,10 @@
             });
         }
 
+        function initMap() {
+        // Now it's safe to call Google Maps methods
+        displayFavoriteRestaurants();
+        }
         // Function to display favorite restaurants
         function displayFavoriteRestaurants() {
             const favoritesList = document.getElementById('favorites-list');
@@ -78,7 +174,7 @@
                             <h3>${placeDetails.name}</h3>
                             <p><strong>Address:</strong> ${placeDetails.formatted_address || 'Not available'}</p>
                             <p><strong>Rating:</strong> ${placeDetails.rating || 'Not available'}</p>
-                            <button class="view-more-btn" onclick="window.open('https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}', '_blank')">View More</button>
+                            <button class="btn" onclick="window.open('https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}', '_blank')">View More Info</button>
                         </div>
                     `;
 
@@ -88,7 +184,10 @@
         }
 
         // Call the function to display favorite restaurants when the page loads
-        window.onload = displayFavoriteRestaurants;
+        document.addEventListener("DOMContentLoaded", function () {
+        displayFavoriteRestaurants();
+        });
+
     </script>
 </body>
 

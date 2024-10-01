@@ -1,54 +1,239 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-}
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      height:100vh;
+      justify-content: center;
+      align-items: center;
+      overflow-y: hidden; /* Prevent scrolling on the body */
+  }
 
-.profile-container {
-    max-width: 800px;
-    margin: 20px auto;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-}
+  .profile {
 
-.profile-header {
-    text-align: center;
+    transform: scale(0.80);
     padding-bottom: 20px;
-}
+    box-sizing: border-box;
 
-.profile-header h1 {
-    margin: 0;
-    font-size: 24px;
-    color: #333;
-}
+    &.profileSection {
+      display: flex;
+      flex-direction: column;
+      background-color: rgb(255 255 255);
+      overflow: auto;
+      padding-bottom:20px;
+      box-sizing: border-box;
 
-.profile-header p {
-    color: #666;
-}
+    }
 
-.favorites-section {
-    padding: 10px;
-}
+    .logo-container {
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically if necessary */
+      height: 100px; /* Adjust height as needed */
+    }
 
-.favorites-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+    .logo {
+        width: 300px; /* Set the desired width for the logo */
+        height: auto; /* Maintain aspect ratio */
+    }
 
-.restaurant-item {
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    padding: 15px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-}
+    .flexColumn {
+      display: flex;
+      flex-direction: column;
+      gap: 18px 0;
+      margin: 54px auto 69px;
+      width: 468px;
+    }
 
-.restaurant-info h3 {
+    .profileImage {
+      width: 100%;
+    }
+
+    .contentBoxMain {
+      display: flex;
+      flex-direction: column;
+      outline: 10px solid rgb(131 148 99);
+      outline-offset: -10px;
+    }
+
+    .flexColumn1 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 39px 0;
+      margin: 22px 18px 48px 20px;
+    }
+
+    .flexColumn2 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .flexRow1 {
+      display: flex;
+      justify-content: space-between;
+      gap: 0 10px;
+      width: 100%;
+    }
+
+    .flexRow2 {
+      display: flex;
+      justify-content: center;
+      gap: 0 10px;
+      width: 100%;
+    }
+
+    .subtitle {
+      margin: 8px 0 12px;
+      min-width: 0;
+      font: 400 20px/1.25 "Gothic A1", Helvetica, Arial, serif;
+      color: rgb(87 87 87);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .editProfileButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0 4px;
+      min-width: 152px;
+      max-width: 152px;
+      border-radius: 30.51px;
+      padding: 12.5px 22px 12.5px 30px;
+      outline: 5px solid rgb(156 82 116);
+      outline-offset: -5px;
+      transition: all 0.3s ease;
+    }
+
+    .editButtonText {
+      margin: 1px 0 2px;
+      min-width: 0;
+      font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
+      color: rgb(0 0 0);
+    }
+
+    .editButtonIcon {
+      width: 17px;
+      min-width: 0;
+    }
+
+    .editProfileButton:hover {
+        background-color: rgb(156, 82, 116); /* Background color on hover */
+        color: #fff; /* Text color changes to white on hover */
+      }
+
+
+    .flexColumn3 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding:0;
+      margin:0 auto;
+    }
+
+    .profile_picture_wrapper {
+      width: 150px;
+      height: 150px;
+      background-color: #e0e0e0;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      margin: 0 auto;
+  }
+
+
+    .profile_picture_wrapper label {
+      display: block;
+      text-align: center;
+      font-size: 14px;
+      color: rgb(126, 126, 126);
+    }
+
+    .profile_picture {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover; /* Ensures the image covers the circle */
+  }
+
+    .fullNameTitle {
+      margin: 14px 0 0;
+      font: 400 24px/1.25 "Gothic A1", Helvetica, Arial, serif;
+      color: rgb(0 0 0);
+      width: 100%;
+      text-align: center;
+    }
+
+    .usernameHighlight {
+      font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
+      color: rgb(0 0 0);
+      text-align: center;
+    }
+
+    .flexColumn4 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 78.6%;
+    }
+    .favorites-list {
+      display: flex;
+      flex-direction: column;
+      align-items:center;
+      justify-items: center;
+      max-width: 340px;
+      margin: 0 auto;
+      padding:0;
+    }
+
+    .favoritesTitle {
+      width: 95.27%;
+      font: 400 24px/1.25 "Gothic A1", Helvetica, Arial, serif;
+      color: rgb(0 0 0);
+      text-align: left;
+      margin: 0 auto;
+    }
+
+    .restaurant-item {
+        display: flex;
+        padding: 10px 10px;
+        border: 3px solid rgb(156 82 116);
+        border-radius: 8px;
+        background-color: #fff;
+        align-items: center;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        width: 290px;
+        margin: 10px auto;
+      }
+
+      .restaurant-item:hover {
+        transform: scale(1.02);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+    .flexColumn5 {
+      display: flex;
+      flex-direction: column;
+      margin: 5.5px 0 4.5px 16.57%;
+      width: 163px;
+    }
+
+    .restaurantTitle {
+      display: flex;
+      align-items: center;
+      margin: 1px 0 0;
+      font: 600 20px/1.25 "Gothic A1", Helvetica, Arial, serif;
+      color: rgb(0 0 0);
+    }
+
+    .restaurant-info h3 {
     margin: 0 0 10px;
     font-size: 20px;
     color: #333;
@@ -73,3 +258,49 @@ body {
 .view-more-btn:hover {
     background-color: #0056b3;
 }
+
+    .flexColumn6 {
+      display: flex;
+      flex-direction: column;
+      margin: 3.5px 0 5.5px 16.57%;
+      width: 163px;
+    }
+
+    .cuisineText {
+      display: flex;
+      align-items: center;
+      font: 400 14px/1.28 "Gothic A1", Helvetica, Arial, serif;
+      color: rgb(0 0 0);
+    }
+
+    .flexColumn7 {
+      display: flex;
+      flex-direction: column;
+      margin: 3.5px 0 5.5px 16.57%;
+      width: 163px;
+    }
+
+    .btn {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0 0 2px;
+        width: 236px;
+        max-width: 100%;
+        font: 400 20px/1.25 "Gothic A1", Helvetica, Arial, serif;
+        color: rgb(0, 0, 0); /* Text color should be black */
+        text-align: center;
+        border-radius: 30.51px;
+        padding: 18px 34px;
+        outline: 5px solid rgb(156, 82, 116);
+        outline-offset: -5px;
+        background-color: transparent; /* Ensure background is transparent initially */
+        transition: all 0.3s ease; /* Smooth transition for hover effects */
+      }
+      
+      .btn:hover {
+        background-color: rgb(156, 82, 116); /* Background color on hover */
+        color: #fff; /* Text color changes to white on hover */
+      }
+  
+
+  }

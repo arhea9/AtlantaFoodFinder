@@ -12,4 +12,6 @@ urlpatterns = [
     path('submit_login/', views.login_view, name='submit_login'),  
     path('mapview/', views.mapview, name='mapview'),  # This renders mapview.html
     path('profile/', views.profile, name='profile'),  # This renders profile.html
+    path('index/', views.index, name='index'),  # This renders profile.html
+
 ]
