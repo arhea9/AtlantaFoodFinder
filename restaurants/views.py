@@ -13,9 +13,11 @@ from .models import Profile
 def index(request):
     return render(request, "index.html")
 
+def signup(request):
+    return render(request, "registration/signup.html")
 def forgot_password(request):
     return render(request, 'forgotpassword.html')
-    
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -40,7 +42,7 @@ def signup_view(request):
         email = request.POST['email']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
-        profile_picture = request.FILES.get('profile_picture')
+        profile_picture = request.FILES.get('profile_picture', None)
 
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists. Please choose a different one.")
@@ -48,6 +50,7 @@ def signup_view(request):
 
         # Create a new user
         user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+        user.save()
 
         # Create a profile for the user
         profile = Profile(user=user, profile_picture=profile_picture)
