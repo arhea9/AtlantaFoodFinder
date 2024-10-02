@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path,include
 from restaurants import views
 import django.contrib.auth.views as auth_views
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
 
@@ -31,4 +32,5 @@ urlpatterns = [
     path('submit_login/', views.login_view, name='submit_login'),  
     path('mapview/', views.mapview, name='mapview'),  # This renders mapview.html
     path('profile/', views.profile_view, name='profile'),  # This renders profile.html
+    path('logout/', LogoutView.as_view(next_page='index'), name='logout'),
 ]

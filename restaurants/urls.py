@@ -1,12 +1,14 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from restaurants import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth.views import LogoutView
 
 app_name = "restaurants"
 urlpatterns = [
+    path('restaurants/', include('restaurants.urls', namespace='restaurants')),
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('signup/', views.signup, name='signup'),
@@ -18,6 +20,7 @@ urlpatterns = [
     path('mapview/', views.mapview, name='mapview'),  # This renders mapview.html
     path('profile/', views.profile_view, name='profile'),  # This renders profile.html
     path('index/', views.index, name='index'),  # This renders profile.html
+    path('logout/', LogoutView.as_view(next_page='index'), name='logout'),  # Redirect to 'home' after logout
 
 ]
 

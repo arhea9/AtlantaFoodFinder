@@ -23,15 +23,17 @@
 
                         <!-- Profile View Mode -->
                         <div id="profileView" class="flexColumn3">
-                            <div class="flexRow1">
-                                <!-- Return Link in View Mode -->
-                                <a href="{% url 'mapview' %}" class="subtitle"> &lt; return</a>
 
-                                <!-- Edit Profile Button in View Mode -->
-                                <button id="editProfileButton" class="editProfileButton" onclick="toggleEditMode()">
-                                    <p class="editButtonText">edit profile</p>
-                                    <img class="editButtonIcon" src="{% static 'restaurants/images/edit_icon.png' %}" alt="edit profile" />
-                                </button>
+                            <div class="flexRow1">
+                            <!-- Cancel Button in Edit Mode -->
+                            <a href="{% url 'mapview' %}" class="subtitle"> &lt; return</a>
+                            <!-- Logout Button in Edit Mode -->
+                            <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="editProfileButton">
+                                <p class="editButtonText">log out</p>
+                            </button>
+                            </form>
                             </div>
 
                             <div class="flex-row2">
