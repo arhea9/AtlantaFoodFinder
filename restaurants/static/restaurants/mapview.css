@@ -223,3 +223,25 @@ select {
 .visible-text {
     display: block;
 }
+
+/* Star Rating Styles */
+.rating-container {
+    display: flex;
+    justify-content: center; /* Centers the stars horizontally */
+    margin-top: 20px; /* Adjust this to fit your layout */
+}
+
+.star-rating {
+    cursor: pointer;
+    font-size: 50px; /* Adjust size for bigger stars */
+    color: #ccc; /* Default empty star color */
+}
+
+.star {
+    margin-right: 10px; /* Space between stars */
+}
+
+.star:hover,
+.star.selected {
+    color: gold; /* Color for selected and hovered stars */
+}
