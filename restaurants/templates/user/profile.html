@@ -26,32 +26,46 @@
             <img class="logo" src="{% static 'restaurants/images/logo.png' %}" alt="atl food finder" />
           </a>
         </div>
-
+  
         <div class="contentBoxMain">
           <div class="flexColumn1">
             <div class="flexColumn2">
               <div class="flexRow1">
                 <a href="{% url 'mapview' %}" class="subtitle"> &lt; return</a>
-
-                <!-- Logout Button -->
-                            <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="editProfileButton">
-                                <p class="editButtonText">log out</p>
-                            </button>
-                            </form>
+  
+                <!-- Edit Profile Button -->
+                <button id="editProfileButton" class="editProfileButton" onclick="toggleEditMode()">
+                  <p class="editButtonText">edit profile</p>
+                  <img class="editButtonIcon" src="{% static 'restaurants/images/edit_icon.png' %}" alt="edit profile" />
+                </button>
               </div>
-
+  
               <!-- Profile View Mode -->
               <div id="profileView" class="flexColumn3">
                 <div class="flex-row2">
                   <div class="profile_picture_wrapper">
-                    <img id="profilePicture" class="profile_picture" src="{% static 'restaurants/images/default-profile.jpg' %}" />
+                    <img id="profilePicture" class="profile_picture" src="{% static 'restaurants/images/default-profile.png' %}" />
                   </div>
                   <h2 class="fullNameTitle">{{ user.first_name }} {{ user.last_name }}</h2>
                   <p class="usernameHighlight">{{ user.username }}</p>
                 </div>
               </div>
+  
+              <!-- Profile Edit Mode (Initially Hidden) -->
+              <div id="profileEdit" class="flexColumn3" style="display: none;">
+                <div class="flex-row2">
+                  <div class="profile_picture_wrapper">
+                    <input type="file" id="profilePictureUpload" onchange="previewProfilePicture(event)" />
+                    <img id="profilePicturePreview" class="profile_picture" src="{% static 'restaurants/images/default-profile.png' %}" />
+                  </div>
+                  <input type="text" id="firstNameEdit" value="FNAME" placeholder="First Name" />
+                  <input type="text" id="lastNameEdit" value="LNAME" placeholder="Last Name" />
+                  <input type="text" id="usernameEdit" value="username" placeholder="Username" />
+                </div>
+                <button class="saveButton" onclick="saveProfile()">Save</button>
+                <button class="cancelButton" onclick="toggleEditMode()">Cancel</button>
+              </div>
+  
               <!-- Favorites Section -->
               <div class="restaurant-list">
                 <section class="favorites-section">
@@ -63,7 +77,7 @@
                   </div>
                 </section>
               </div>
-
+  
             </div>
           </div>
         </div>

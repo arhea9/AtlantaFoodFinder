@@ -15,7 +15,7 @@
               <img class="logo" src="{% static 'restaurants/images/logo.png' %}" alt="atl food finder" />
             </a>
             <a href="{% url 'profile' %}">
-              <img id="profilePictureHeader" class="profile-picture-header" src="{% static 'restaurants/images/default-profile.jpg' %}" alt="Profile" />
+              <img id="profilePictureHeader" class="profile-picture-header" src="{% static 'restaurants/images/default-profile.png' %}" alt="Profile" />
             </a>
           </div>
           
@@ -313,18 +313,18 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                             <p><strong>Phone:</strong> ${phone}</p>
                             <div><strong>Reviews:</strong>${reviews}</div>
 
-{#                            <!-- Star Rating Section -->#}
-{#                            <div class="rating-container">#}
-{#                                <div class="star-rating">#}
-{#                                    <span class="star" data-value="1">&#9734;</span>#}
-{#                                    <span class="star" data-value="2">&#9734;</span>#}
-{#                                    <span class="star" data-value="3">&#9734;</span>#}
-{#                                    <span class="star" data-value="4">&#9734;</span>#}
-{#                                    <span class="star" data-value="5">&#9734;</span>#}
-{#                                </div>#}
-{#                                <!-- Hidden input to store the selected rating -->#}
-{#                                <input type="hidden" name="rating" id="rating-value">#}
-{#                            </div>#}
+                            <!-- Star Rating Section -->
+                            <div class="rating-container">
+                                <div class="star-rating">
+                                    <span class="star" data-value="1">&#9734;</span>
+                                    <span class="star" data-value="2">&#9734;</span>
+                                    <span class="star" data-value="3">&#9734;</span>
+                                    <span class="star" data-value="4">&#9734;</span>
+                                    <span class="star" data-value="5">&#9734;</span>
+                                </div>
+                                <!-- Hidden input to store the selected rating -->
+                                <input type="hidden" name="rating" id="rating-value">
+                            </div>
 
                             <!-- Buttons and Review Box -->
                             <button id="see-more" class="btn">See More</button>
@@ -340,42 +340,26 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                             // Open the restaurant's Google Maps page in a new tab
                             window.open(`https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}`, '_blank');
                         });
-<<<<<<< HEAD:restaurants/templates/restaurants/mapview.html
 
                         document.addEventListener("DOMContentLoaded", function() {
                             const stars = document.querySelectorAll(".star");
                             const ratingInput = document.getElementById("rating-value");
-=======
-                        document.getElementById("write-review").addEventListener("click", function() {
-                            var textBox=document.getElementById("textbox");
-                            if (textBox.classList.contains("hidden=text")) {
-                                textBox.classList.remove("hidden-text");
-                                textBox.classList.add("visible-text");
-                            } else {
-                                textBox.classList.remove("visible-text");
-                                textBox.classList.add("hidden-text");
-                            }
-                        });
-                        {#document.addEventListener("DOMContentLoaded", function() {#}
-                        {#    const stars = document.querySelectorAll(".star");#}
-                        {#    const ratingInput = document.getElementById("rating-value");#}
-                        {##}
-                        {#    stars.forEach(star => {#}
-                        {#        star.addEventListener("click", function() {#}
-                        {#            const rating = this.getAttribute("data-value");#}
-                        {#            ratingInput.value = rating; // Store the rating value in the hidden input#}
-                        {##}
-                        {#            // Remove the 'selected' class from all stars#}
-                        {#            stars.forEach(s => s.classList.remove("selected"));#}
-                        {##}
-                        {#            // Add the 'selected' class to the clicked star and all preceding stars#}
-                        {#            for (let i = 0; i < rating; i++) {#}
-                        {#                stars[i].classList.add("selected");#}
-                        {#            }#}
-                        {#        });#}
-                        {#    });#}
->>>>>>> 7abeaffbf473bb68f271c6c5f20c7f96c10a57e0:restaurants/templates/mapview.html
 
+                            stars.forEach(star => {
+                                star.addEventListener("click", function() {
+                                    const rating = this.getAttribute("data-value");
+                                    ratingInput.value = rating; // Store the rating value in the hidden input
+
+                                    // Remove the 'selected' class from all stars
+                                    stars.forEach(s => s.classList.remove("selected"));
+
+                                    // Add the 'selected' class to the clicked star and all preceding stars
+                                    for (let i = 0; i < rating; i++) {
+                                        stars[i].classList.add("selected");
+                                    }
+                                });
+                            });
+                        });
                     });
                 }
             });
@@ -445,18 +429,18 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                                     <p><strong>Phone:</strong> ${phone}</p>
                                     <div><strong>Reviews:</strong>${reviews}</div>
 
-{#                                    <!-- Star Rating Section -->#}
-{#                                    <div class="rating-container">#}
-{#                                        <div class="star-rating">#}
-{#                                            <span class="star" data-value="1">&#9734;</span>#}
-{#                                            <span class="star" data-value="2">&#9734;</span>#}
-{#                                            <span class="star" data-value="3">&#9734;</span>#}
-{#                                            <span class="star" data-value="4">&#9734;</span>#}
-{#                                            <span class="star" data-value="5">&#9734;</span>#}
-{#                                        </div>#}
-{#                                        <!-- Hidden input to store the selected rating -->#}
-{#                                        <input type="hidden" name="rating" id="rating-value">#}
-{#                                    </div>#}
+                                    <!-- Star Rating Section -->
+                                    <div class="rating-container">
+                                        <div class="star-rating">
+                                            <span class="star" data-value="1">&#9734;</span>
+                                            <span class="star" data-value="2">&#9734;</span>
+                                            <span class="star" data-value="3">&#9734;</span>
+                                            <span class="star" data-value="4">&#9734;</span>
+                                            <span class="star" data-value="5">&#9734;</span>
+                                        </div>
+                                        <!-- Hidden input to store the selected rating -->
+                                        <input type="hidden" name="rating" id="rating-value">
+                                    </div>
 
                                     <!-- Buttons and Review Box -->
                                     <button id="see-more" class="btn">See More</button>
@@ -472,7 +456,6 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                                     // Open the restaurant's Google Maps page in a new tab
                                     window.open(`https://www.google.com/maps/place/?q=place_id:${placeDetails.place_id}`, '_blank');
                                 });
-<<<<<<< HEAD:restaurants/templates/restaurants/mapview.html
 
                                 document.addEventListener("DOMContentLoaded", function() {
                                     const stars = document.querySelectorAll(".star");
@@ -492,38 +475,8 @@ document.getElementById('filter-btn').addEventListener('click', searchRestaurant
                                             }
                                         });
                                     });
-=======
-                                document.getElementById("write-review").addEventListener("click", function() {
-                                    var textBox = document.getElementById("textBox");
-                                    if (textBox.classList.contains("hidden-text")) {
-                                        textBox.classList.remove("hidden-text");
-                                        textBox.classList.add("visible-text");
-                                    } else {
-                                        textBox.classList.remove("visible-text");
-                                        textBox.classList.add("hidden-text");
-                                    }
                                 });
-                                {#document.addEventListener("DOMContentLoaded", function() {#}
-                                {#    const stars = document.querySelectorAll(".star");#}
-                                {#    const ratingInput = document.getElementById("rating-value");#}
-                                {##}
-                                {#    stars.forEach(star => {#}
-                                {#        star.addEventListener("click", function() {#}
-                                {#            const rating = this.getAttribute("data-value");#}
-                                {#            ratingInput.value = rating; // Store the rating value in the hidden input#}
-                                {##}
-                                {#            // Remove the 'selected' class from all stars#}
-                                {#            stars.forEach(s => s.classList.remove("selected"));#}
-                                {##}
-                                {#            // Add the 'selected' class to the clicked star and all preceding stars#}
-                                {#            for (let i = 0; i < rating; i++) {#}
-                                {#                stars[i].classList.add("selected");#}
-                                {#            }#}
-                                {#        });#}
-                                {#    });#}
->>>>>>> 7abeaffbf473bb68f271c6c5f20c7f96c10a57e0:restaurants/templates/mapview.html
-                                });
-
+                            });
                         }
                     });
                 });

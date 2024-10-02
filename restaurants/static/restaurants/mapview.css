@@ -198,50 +198,50 @@ body {
     cursor: pointer;
 }
 
-/*label {*/
-/*    font-family: "Arial", sans-serif; !* Consistent font *!*/
-/*    color: #333; !* Dark text for readability *!*/
-/*    margin-top: 20px; !* Space between elements *!*/
-/*    display: block; !* Make labels block elements *!*/
-/*}*/
+label {
+    font-family: "Arial", sans-serif; /* Consistent font */
+    color: #333; /* Dark text for readability */
+    margin-top: 20px; /* Space between elements */
+    display: block; /* Make labels block elements */
+}
 
-/*!* Styling for select elements *!*/
-/*select {*/
-/*    width: 100%; !* Full width for selects *!*/
-/*    padding: 10px; !* Padding inside selects *!*/
-/*    margin-top: 5px; !* Space between label and select *!*/
-/*    border-radius: 5px; !* Rounded corners *!*/
-/*    border: 1px solid #ccc; !* Match border with site *!*/
-/*}*/
+/* Styling for select elements */
+select {
+    width: 100%; /* Full width for selects */
+    padding: 10px; /* Padding inside selects */
+    margin-top: 5px; /* Space between label and select */
+    border-radius: 5px; /* Rounded corners */
+    border: 1px solid #ccc; /* Match border with site */
+}
 
 
-/*.hidden-text {*/
-/*    display: none;*/
-/*    margin-top: 15px;*/
-/*}*/
+.hidden-text {
+    display: none;
+    margin-top: 15px;
+}
 
-/*.visible-text {*/
-/*    display: block;*/
-/*}*/
+.visible-text {
+    display: block;
+}
 
-/*!* Star Rating Styles *!*/
-/*.rating-container {*/
-/*    display: flex;*/
-/*    justify-content: center; !* Centers the stars horizontally *!*/
-/*    margin-top: 20px; !* Adjust this to fit your layout *!*/
-/*}*/
+/* Star Rating Styles */
+.rating-container {
+    display: flex;
+    justify-content: center; /* Centers the stars horizontally */
+    margin-top: 20px; /* Adjust this to fit your layout */
+}
 
-/*.star-rating {*/
-/*    cursor: pointer;*/
-/*    font-size: 50px; !* Adjust size for bigger stars *!*/
-/*    color: #ccc; !* Default empty star color *!*/
-/*}*/
+.star-rating {
+    cursor: pointer;
+    font-size: 50px; /* Adjust size for bigger stars */
+    color: #ccc; /* Default empty star color */
+}
 
-/*.star {*/
-/*    margin-right: 10px; !* Space between stars *!*/
-/*}*/
+.star {
+    margin-right: 10px; /* Space between stars */
+}
 
-/*.star:hover,*/
-/*.star.selected {*/
-/*    color: gold; !* Color for selected and hovered stars *!*/
-/*}*/
+.star:hover,
+.star.selected {
+    color: gold; /* Color for selected and hovered stars */
+}
