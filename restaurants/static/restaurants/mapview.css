@@ -108,6 +108,7 @@ body {
     display: flex;
     align-items: center; /* Align items vertically centered */
     justify-content: space-between; /* Space between items */
+    margin-left: 10px;
   }
 
 .logo {
@@ -120,8 +121,8 @@ body {
     height: 40px; /* Set height as needed */
     border-radius: 50%; /* Make it circular */
     margin-left: auto; /* Push to the right */
-    margin-right: 15px;
     cursor: pointer; /* Change cursor on hover */
+    margin-right: 10px;
   }
 
 /* Button styling */

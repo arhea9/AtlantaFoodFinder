@@ -9,10 +9,11 @@ body {
   }
 
   .profile {
-
+    max-width: 900px;
     transform: scale(0.80);
     padding-bottom: 20px;
     box-sizing: border-box;
+    margin: auto;
 
     &.profileSection {
       display: flex;
@@ -42,6 +43,7 @@ body {
       gap: 18px 0;
       margin: 54px auto 69px;
       width: 468px;
+      align-items: center;
     }
 
     .profileImage {
@@ -50,9 +52,11 @@ body {
 
     .contentBoxMain {
       display: flex;
+      align-items: center;
       flex-direction: column;
       outline: 10px solid rgb(131 148 99);
       outline-offset: -10px;
+      width: 900px;
     }
 
     .flexColumn1 {
@@ -186,7 +190,7 @@ body {
       flex-direction: column;
       align-items:center;
       justify-items: center;
-      max-width: 340px;
+      width: 700px;
       margin: 0 auto;
       padding:0;
     }
@@ -208,7 +212,7 @@ body {
         align-items: center;
         cursor: pointer;
         transition: transform 0.2s ease;
-        width: 290px;
+        width: 700px;
         margin: 10px auto;
       }
 
