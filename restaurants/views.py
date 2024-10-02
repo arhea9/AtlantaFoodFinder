@@ -35,6 +35,7 @@ def login_view(request):
             pass
     return render(request, 'registration/login.html')
 
+
 def signup_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -42,7 +43,6 @@ def signup_view(request):
         email = request.POST['email']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
-        profile_picture = request.FILES.get('profile_picture', None)
 
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists. Please choose a different one.")
@@ -53,15 +53,14 @@ def signup_view(request):
         user.save()
 
         # Create a profile for the user
-        profile = Profile(user=user, profile_picture=profile_picture)
+        profile = Profile(user=user)
         profile.save()
 
         # Automatically log in the user after signup
         login(request, user)
-        return redirect('profile')  # Redirect to the profile page after signup
+        return redirect('mapview')  # Redirect to the profile page after signup
 
     return render(request, 'registration/signup.html')
-
 def mapview(request):
     return render(request, 'mapview.html')  # Ensure this template exists
 @login_required
