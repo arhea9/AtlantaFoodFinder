@@ -166,7 +166,7 @@ body {
   }
 
     .fullNameTitle {
-      margin: 14px 0 0;
+      margin: 24px 0 0;
       font: 400 24px/1.25 "Gothic A1", Helvetica, Arial, serif;
       color: rgb(0 0 0);
       width: 100%;
@@ -174,9 +174,26 @@ body {
     }
 
     .usernameHighlight {
-      font: 400 16px/1.25 "Gothic A1", Helvetica, Arial, serif;
+      font: 400 18px/1.25 "Gothic A1", Helvetica, Arial, serif;
       color: rgb(0 0 0);
       text-align: center;
+    }
+
+      .input_wrapper {
+      flex: 1;
+      position: relative;
+          margin-top: 10px;
+    }
+
+      input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #e0e0e0;
+      border: none;
+      border-radius: 50px;
+      box-sizing: border-box;
     }
 
     .flexColumn4 {

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    {% load static %}
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+
+    <!-- Please DO NOT remove this line, all link and script tags will be merged to here -->
+
+    <link rel="stylesheet" type="text/css" href="/css/common.css" />
+
+    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+
+    <link rel="stylesheet" type="text/css" href="/css/Signup.css" />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurants/userauth.css' %}" /> 
+
+    <script>
+      function previewImage(event) {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+          
+          reader.onload = function(e) {
+              const img = document.getElementById('profilePicturePreview');
+              img.src = e.target.result;
+          }
+          
+          if (file) {
+              reader.readAsDataURL(file);
+          }
+      }
+  </script>
+  
+  </head>
+
+  <body class="flex-column">
+    <div class="signup root">
+      <div class="flex_col">
+        <img class="image" src="{% static 'restaurants/images/logo.png' %}" alt="alt text" />
+        <h1 class="title">welcome! let’s get to know you!</h1>
+  
+      <form action="{% url 'submit_signup' %}"  method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="group">
+        <div class="flex_row">
+            <div class="input_wrapper">
+                <label for="first_name" class="highlight"></label>
+                <input type="text" id="first_name" name="first_name" required placeholder="first name" />
+            </div>
+            <div class="input_wrapper">
+                <label for="last_name" class="highlight"></label>
+                <input type="text" id="last_name" name="last_name" required placeholder="last name" />
+            </div>
+        </div>
+
+        <div class="input_wrapper">
+            <label for="email" class="highlight"></label>
+            <input type="email" id="email" name="email" required placeholder="email" />
+        </div>
+
+        <div class="input_wrapper">
+            <label for="username" class="highlight"></label>
+            <input type="text" id="username" name="username" required placeholder="username" />
+        </div>
+
+        <div class="input_wrapper">
+            <label for="password" class="highlight"></label>
+            <input type="password" id="password" name="password" required placeholder="password" />
+        </div>
+
+        <div class="input_wrapper">
+            <label for="confirm_password" class="highlight"></label>
+            <input type="password" id="confirm_password" name="confirm_password" required placeholder="confirm password" />
+        </div>
+    </div>
+
+    <!-- Submit button -->
+    <button type="submit" class="btn">create my account</button>
+</form>
+<div class="loginPromptDiv">
+    <a href="{% url 'login' %}">have an account already? log in</a>
+</div>
+
+      </div>
+    </div>
+  </body>
+  
+  
+
+  </html>
+  
