@@ -67,6 +67,7 @@ a {
       align-items: center;
       background-color: rgb(255 255 255);
       height: 100vh;
+      padding-bottom: 50px;
     }
   
     .flex_col {
@@ -134,7 +135,7 @@ a {
     .btn {
       display: flex;
       justify-content: center;
-      margin: 54px 0 0 2px;
+      margin: 20px 0 0;
       width: 236px;
       max-width: 100%;
       font: 400 20px/1.25 "Gothic A1", Helvetica, Arial, serif;
