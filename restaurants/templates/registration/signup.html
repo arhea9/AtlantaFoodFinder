@@ -46,6 +46,7 @@
         <h1 class="title">welcome! let’s get to know you!</h1>
   
         <form action="{% url 'submit_signup' %}"  method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
           <div class="group">
             <div class="flex_row">
               <div class="input_wrapper">

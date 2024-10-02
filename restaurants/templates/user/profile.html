@@ -26,20 +26,20 @@
             <img class="logo" src="{% static 'restaurants/images/logo.png' %}" alt="atl food finder" />
           </a>
         </div>
-  
+
         <div class="contentBoxMain">
           <div class="flexColumn1">
             <div class="flexColumn2">
               <div class="flexRow1">
                 <a href="{% url 'mapview' %}" class="subtitle"> &lt; return</a>
-  
+
                 <!-- Edit Profile Button -->
                 <button id="editProfileButton" class="editProfileButton" onclick="toggleEditMode()">
                   <p class="editButtonText">edit profile</p>
                   <img class="editButtonIcon" src="{% static 'restaurants/images/edit_icon.png' %}" alt="edit profile" />
                 </button>
               </div>
-  
+
               <!-- Profile View Mode -->
               <div id="profileView" class="flexColumn3">
                 <div class="flex-row2">
@@ -50,22 +50,43 @@
                   <p class="usernameHighlight">{{ user.username }}</p>
                 </div>
               </div>
-  
+
               <!-- Profile Edit Mode (Initially Hidden) -->
               <div id="profileEdit" class="flexColumn3" style="display: none;">
+                <div class="flexRow1">
+                  <!-- Cancel Button -->
+                  <button id="editProfileButton" class="editProfileButton" onclick="toggleEditMode()">
+                    <p class="editButtonText">cancel</p>
+                  </button>
+
+                  <!-- Save Profile Button -->
+                  <button id="editProfileButton" class="editProfileButton" onclick="saveProfile()">
+                    <p class="editButtonText">save</p>
+                  </button>
+                </div>
                 <div class="flex-row2">
                   <div class="profile_picture_wrapper">
-                    <input type="file" id="profilePictureUpload" onchange="previewProfilePicture(event)" />
+                    <label for="profile_picture" class="highlight6">profile picture</label>
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" style="display: none;" onchange="previewImage(event)" />
                     <img id="profilePicturePreview" class="profile_picture" src="{% static 'restaurants/images/default-profile.png' %}" />
-                  </div>
-                  <input type="text" id="firstNameEdit" value="FNAME" placeholder="First Name" />
-                  <input type="text" id="lastNameEdit" value="LNAME" placeholder="Last Name" />
-                  <input type="text" id="usernameEdit" value="username" placeholder="Username" />
                 </div>
-                <button class="saveButton" onclick="saveProfile()">Save</button>
-                <button class="cancelButton" onclick="toggleEditMode()">Cancel</button>
+                  <div class="flex_row">
+                    <div class="input_wrapper">
+                      <label for="first_name" class="highlight"></label>
+                      <input type="text" id="first_name" name="first_name" required placeholder="first name" />
+                    </div>
+                    <div class="input_wrapper">
+                      <label for="last_name" class="highlight"></label>
+                      <input type="text" id="last_name" name="last_name" required placeholder="last name" />
+                    </div>
+                  </div>
+
+                  <div class="input_wrapper">
+                    <label for="username" class="highlight"></label>
+                    <input type="text" id="username" name="username" required placeholder="username" />
+                  </div>
+                </div>
               </div>
-  
               <!-- Favorites Section -->
               <div class="restaurant-list">
                 <section class="favorites-section">
@@ -77,7 +98,7 @@
                   </div>
                 </section>
               </div>
-  
+
             </div>
           </div>
         </div>
