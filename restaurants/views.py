@@ -44,6 +44,7 @@ def signup_view(request):
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
 
+        # Check if the username already exists
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists. Please choose a different one.")
             return render(request, 'registration/signup.html')
@@ -52,8 +53,14 @@ def signup_view(request):
         user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
         user.save()
 
+        # Check if the profile already exists for the user
+        if Profile.objects.filter(user=user).exists():
+            messages.warning(request, "Profile already exists for this user.")
+            # Redirect to the profile page or some other appropriate action
+            return redirect('mapview')  # Change to your desired redirect URL
+
         # Create a profile for the user
-        profile = Profile(user=user)
+        profile = Profile.objects.create(user=user)
         profile.save()
 
         # Automatically log in the user after signup
