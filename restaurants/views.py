@@ -40,34 +40,30 @@ def signup_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
         email = request.POST['email']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
 
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return render(request, 'registration/signup.html')
+
         # Check if the username already exists
         if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists. Please choose a different one.")
+            messages.error(request, "Username already exists.")
             return render(request, 'registration/signup.html')
 
         # Create a new user
         user = User.objects.create_user(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
         user.save()
 
-        # Check if the profile already exists for the user
-        if Profile.objects.filter(user=user).exists():
-            messages.warning(request, "Profile already exists for this user.")
-            # Redirect to the profile page or some other appropriate action
-            return redirect('mapview')  # Change to your desired redirect URL
-
-        # Create a profile for the user
-        profile = Profile.objects.create(user=user)
-        profile.save()
-
         # Automatically log in the user after signup
         login(request, user)
-        return redirect('mapview')  # Redirect to the profile page after signup
+        return redirect('mapview')  # Redirect to profile after signup
 
     return render(request, 'registration/signup.html')
+
 def mapview(request):
     return render(request, 'mapview.html')  # Ensure this template exists
 @login_required
